@@ -15,8 +15,15 @@ public class GreetingController {
         model.addAttribute("name", name);
         return "greeting";
     }
+
     @RequestMapping("/heresy/{smallCate}")
     public String index(@PathVariable("smallCate") String smallCate) {
         return "/home/"+smallCate;
+    }
+
+    @RequestMapping("/heresy/{largeCate}/{midCate}")
+    public String index(@PathVariable("largeCate") String largeCate,
+                        @PathVariable("midCate") String midCate) {
+        return "/home/"+largeCate+"/"+midCate;
     }
 }
