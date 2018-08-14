@@ -1,3 +1,4 @@
 $(document).ready(function(){
-   console.log("document ready")
+   $('#summernote').summernote();
+   alert(3)
 });
