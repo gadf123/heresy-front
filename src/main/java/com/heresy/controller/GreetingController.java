@@ -26,4 +26,5 @@ public class GreetingController {
                         @PathVariable("midCate") String midCate) {
         return "/home/"+largeCate+"/"+midCate;
     }
+
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/config :: configFragment">
+</head>
+<body>
+<div th:replace="layout/header :: header"></div>
+<div class="container">
+
+        <div class="hc vc myinfo">
+            <table class="table table-bordered" style="width: 400px">
+                <thead>
+                <tr>
+                    <th scope="col" colspan="3">회원정보</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td style="width:100px">ID</td>
+                    <td style="width:300px" colspan="2">elther@naver.com</td>
+                </tr>
+                <tr>
+                    <td>Nick</td>
+                    <td colspan="2">돌고래야</td>
+                </tr>
+                <tr>
+                    <td>Lv / Exp</td>
+                    <td colspan="2">9 / 3423 (23%)</td>
+                </tr>
+                <tr>
+                    <td>작성글 수</td>
+                    <td>3424</td>
+                    <td style="width: 70px"><button>보기</button></td>
+                </tr>
+                <tr>
+                    <td>댓글 수</td>
+                    <td>324</td>
+                    <td style="width: 70px"><button>보기</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <span>
+                <span><button>수정</button></span>
+                <span><button>탈퇴</button></span>
+            </span>
+
+        </div>
+
+
+</div>
+</body>
+<script th:inline="javascript">
+</script>
+
+</html>

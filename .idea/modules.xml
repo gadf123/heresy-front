@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/heresy-front.iml" filepath="$PROJECT_DIR$/heresy-front.iml" />
+      <module fileurl="file://$PROJECT_DIR$/heresyfront.iml" filepath="$PROJECT_DIR$/heresyfront.iml" />
     </modules>
   </component>
 </project>
