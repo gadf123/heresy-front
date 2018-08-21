@@ -63,6 +63,8 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-devtools:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.0.3.RELEASE" level="project" />
+    <orderEntry type="library" name="org.thymeleaf:thymeleaf:Release" level="project" />
+    <orderEntry type="library" name="org.thymeleaf:thymeleaf-spring4:Release" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
