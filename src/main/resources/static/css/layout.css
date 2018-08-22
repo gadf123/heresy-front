@@ -21,6 +21,16 @@
 .content{
     width:1600px;
     height:900px;
-    background-color: #cbcbcb;
+    /*background-color: #cbcbcb;*/
     margin : 0 auto;
+
+}
+
+.content .container .main-container{
+    padding-top: 100px; !important;
+}
+
+.content .container .main-container .main-table{
+    height: 300px;
+    margin-bottom: 50px;
 }
