@@ -1,9 +1,9 @@
 $(document).ready(function(){
-   $('#summernote').summernote();
+   //$('#summernote').summernote();
+    $('a[href="'+window.location.pathname+'"]').parent().addClass('active')
 });
 
 var ajaxCall = function(_url, _option, doneCallBack, failCallBack){
-    console.log(window)
     $.ajax({
         url : _url,
         method : _option.method ? _option.method : 'get',

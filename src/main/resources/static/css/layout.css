@@ -18,6 +18,10 @@
     font-weight: bolder;
 }
 
+#header .nav-item.active > a{
+    color : orange !important;
+}
+
 .content{
     width:1600px;
     height:900px;
