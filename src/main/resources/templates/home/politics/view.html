@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/config :: configFragment">
+</head>
+<body>
+<div th:replace="layout/header :: header"></div>
+<div class="content">
+    <div class="container">
+        <div style="height:900px">
+            <div style="height :50px; padding : 21px; font-size :18px">
+                <span style="display :inline-block; width:80%;"}>
+                    타이틀
+                </span>
+                <span style="display :inline-block; width : 15%;
+                            font-size : 13px; text-align : right">
+                    2018.08.18 05:00:00
+                </span>
+            </div>
+            <div style="height :500px;
+                    border-bottom : 2px solid #ababab;
+                    border-top : 2px solid #ababab;
+                    padding : 40px">
+                <div style="height :400px">
+                    내용
+                </div>
+                <div style="text-align :center">
+                    <button class="articleBtn btn btn-dark" type="button">
+                        Like
+                    </button>
+                    <button class="articleBtn btn btn-dark" type="button">
+                        Dislike
+                    </button>
+                    <button class="articleBtn btn btn-dark rewrite_link_to" type="button">
+                        수정
+                    </button>
+                    <button class="articleBtn btn btn-dark" type="button">
+                        삭제
+                    </button>
+                </div>
+            </div>
+            <div style="height :300px;
+                    border-bottom : 2px solid #ababab;
+                    padding : 40px">
+                댓글 영역
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    var linkTo = function(event){
+        location.href = "/heresy/politics/rewrite"
+    };
+
+    $(document).ready(function(){
+        $('.rewrite_link_to').click(linkTo)
+
+    });
+</script>
+</html>

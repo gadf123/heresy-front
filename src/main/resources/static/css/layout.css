@@ -38,3 +38,9 @@
     height: 300px;
     margin-bottom: 50px;
 }
+
+/*articleArea*/
+.articleBtn {
+    width : 100px;
+    margin-left: 10px;
+}
