@@ -44,3 +44,24 @@
     width : 100px;
     margin-left: 10px;
 }
+
+/*avatar*/
+.login-profile{
+    width:200px;
+    color:white;
+}
+.login-profile > .login-avatar {
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    float:left;
+}
+
+.login-profile > .login-name {
+    width:80px;
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: bolder;
+    float : left;
+}
