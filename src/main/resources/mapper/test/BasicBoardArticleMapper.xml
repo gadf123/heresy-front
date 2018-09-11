@@ -11,6 +11,7 @@
             , content
             , createDate
             , subBoardIdxf
+            , subBoardIdx
             , title
             , updatedate
             , userIdx
