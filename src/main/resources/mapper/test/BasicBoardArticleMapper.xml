@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.heresy.mapper.BasicBoardArticleMapper">
+
+    <select id="select" resultType="com.heresy.domain.board.BasicBoardArticle">
+        SELECT
+              bad
+            , content
+            , createDate
+            , subBoardIdxf
+            , title
+            , updatedate
+            , userIdx
+            , userNickName
+        FROM BASICBOARDARTICLE
+    </select>
+
+    <insert id="insert" parameterType="map">
+        INSERT INTO BASICBOARDARTICLE
+            (
+              idx
+            , bad
+            , content
+            , createdate
+            , good
+            , subboardidx
+            , title
+            , updatedate
+            , useridx
+            , usernickname
+            )
+        VALUES (
+              (select ifnull(max(a.idx), 0)+1 from BASICBOARDARTICLE a)
+            , #{bad}
+            , #{content}
+            , CURRENT_TIMESTAMP()
+            , #{good}
+            , #{subBoardIdx}
+            , #{title}
+            , CURRENT_TIMESTAMP()
+            , #{userIdx}
+            , #{userNickName}
+            )
+    </insert>
+
+    <update id="update" parameterType="map">
+        UPDATE
+              BASICBOARDARTICLE
+        SET bad = #{bad}
+            , content = #{content}
+            , good = #{good}
+            , subBoardIdx = #{subBoardIdx}
+            , title = #{title}
+            , updateDate = CURRENT_TIMESTAMP()
+            , userNickName = #{userNickName}
+        WHERE idx = #{idx}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE
+        FROM
+          BASICBOARDARTICLE
+        WHERE idx = #{idx}
+    </delete>
+
+
+
+</mapper>
