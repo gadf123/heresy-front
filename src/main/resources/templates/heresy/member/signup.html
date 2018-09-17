@@ -9,29 +9,43 @@
             <div>
                 <div class="row justify-content-md-center" style="margin:10px 00px;">
                     <div style="width:100px;float:left">아이디</div>
-                    <input type="text">
+                    <input type="text" id="inputId">
                 </div>
 
                 <div class="row justify-content-md-center" style="margin:10px 0px;">
                     <div style="width:100px;float:left">닉네임</div>
-                    <input type="text">
+                    <input type="text" id="inputNickName">
                 </div>
 
                 <div class="row justify-content-md-center" style="margin:10px 0px;">
                     <div style="width:100px;float:left">패스워드</div>
-                    <input type="password">
+                    <input type="password" id="inputPwd">
                 </div>
 
                 <div class="row justify-content-md-center" style="margin:10px 0px;">
                     <div style="width:100px;float:left">패스워드 확인</div>
-                    <input type="password">
+                    <input type="password" id="inputRePwd">
                 </div>
 
                 <div class="row justify-content-md-center" style="">
-                    <button>취소</button>
-                    <button>동의</button>
+                    <button><a href="/heresy/home">취소</a></button>
+                    <button id="signUpSubmit">동의</button>
                 </div>
             </div>
         </div>
     </body>
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            $('#signUpSubmit').click(function(){
+                //if(confirm("회원가입을 완료하시겠습니까?")){
+                var UserData = {
+                    "userId": $('#inputId').val(),
+                    "userNickName": $('#inputNickName').val(),
+                    "password": $('#inputPwd').val()
+                };
+                userModule.signUp(UserData);
+                //}
+            })
+        })
+    </script>
 </html>

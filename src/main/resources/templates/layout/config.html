@@ -8,59 +8,25 @@
     <link rel="stylesheet" th:href="@{/css/layout.css}">
     <link rel="stylesheet" th:href="@{/js/summernote/summernote-bs4.css}">
     <script th:src="@{https://code.jquery.com/jquery-3.3.1.js}"></script>
+    <script th:src="@{https://www.gstatic.com/firebasejs/5.4.1/firebase-app.js}"></script>
+    <script th:src="@{https://www.gstatic.com/firebasejs/5.4.1/firebase-auth.js}"></script>
     <script th:src="@{/js/popper.min.js}"></script>
     <script th:src="@{/js/bootstrap.js}"></script>
     <script th:src="@{/js/summernote/summernote-bs4.js}"></script>
     <script th:src="@{/js/common.js}"></script>
-    <style>
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            $('#loginBtn').click(function(){
+                var id = $('#loginId').val();
+                var pwd = $('#loginPwd').val();
+                userModule.logIn(id,pwd)
+            });
 
-        /* Pagination links */
-        /*.pagination{
-            padding-left:200px;
-        }*/
-
-        /*.pagination a {
-            color: black;
-            float: left;
-            padding: 8px 16px;
-            text-decoration: none;
-            transition: background-color .3s;
-        }
-
-        /* Style the active/current link */
-        /*.pagination a.active {
-            background-color: dodgerblue;
-            color: white;
-        }*/
-
-        /* Add a grey background color on mouse-over */
-        /*.pagination a:hover:not(.active) {background-color: #ddd;}*/
-        
-        .subject{
-            text-align: center;
-        }
-
-        .numcol{
-            text-align:right;
-        }
-
-        .datecol{
-            text-align:right;
-        }
-
-        .articles{
-            position: absolute;
-            width:700px;
-        }
-
-        .myinfo {
-            position: absolute;}
-        .hc { width:200px; left:0; right:0; margin-left:auto; margin-right:auto; }
-        /* 가로 중앙 정렬 */
-        .vc { height:500px; top: 0; bottom:0; margin-top:auto; margin-bottom:auto; }
-        /* 세로 중앙 정렬 */
-
-    </style>
+            $('#logoutBtn').click(function(){
+                userModule.logOut()
+            });
+        })
+    </script>
 </head>
 </html>
 

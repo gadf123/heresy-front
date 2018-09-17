@@ -19,10 +19,10 @@
         FROM BASICBOARDARTICLE
     </select>
 
-    <insert id="insert" parameterType="map">
+    <insert id="insert" parameterType="com.heresy.domain.board.BasicBoardArticle">
         INSERT INTO BASICBOARDARTICLE
             (
-              idx
+              ARTICLEIDX
             , bad
             , content
             , createdate
@@ -34,7 +34,7 @@
             , usernickname
             )
         VALUES (
-              (select ifnull(max(a.idx), 0)+1 from BASICBOARDARTICLE a)
+              (select ifnull(max(a.ARTICLEIDX), 0)+1 from BASICBOARDARTICLE a)
             , #{bad}
             , #{content}
             , CURRENT_TIMESTAMP()

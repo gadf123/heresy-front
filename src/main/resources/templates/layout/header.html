@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -27,35 +29,28 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/heresy/game/board">게임</a>
                         </li>
-                        <!--<li class="nav-item dropdown">-->
-                        <!--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-                        <!--Dropdown-->
-                        <!--</a>-->
-                        <!--<div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-                        <!--<a class="dropdown-item" href="#">Action</a>-->
-                        <!--<a class="dropdown-item" href="#">Another action</a>-->
-                        <!--<div class="dropdown-divider"></div>-->
-                        <!--<a class="dropdown-item" href="#">Something else here</a>-->
-                        <!--</div>-->
-                        <!--</li>-->
-                        <!--<li class="nav-item">-->
-                        <!--<a class="nav-link disabled" href="#">Disabled</a>-->
-                        <!--</li>-->
                     </ul>
-                    <div class="login-profile">
+                    <div class="login-profile off">
                         <img th:src="@{/img/avatar.png}" alt="Avatar" class="login-avatar">
                         <div class="login-name">
-                            <span>rolld</span>
+                            <span id="login-id">rolld</span>
                         </div>
+                        <button id="logoutBtn" class="btn btn-success my-2 my-sm-0" type="button">로그아웃</button>
                     </div>
-                    <!--<form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="아이디" aria-label="아이디">
-                        <input class="form-control mr-sm-2" type="search" placeholder="패스워드" aria-label="패스워드">
-                        <button class="btn btn-success my-2 my-sm-0" type="submit">로그인</button>
-                    </form>-->
+                    <div class="form-inline my-2 my-lg-0 logout-profile off">
+                        <input id="loginId" class="form-control mr-sm-2" type="search" placeholder="아이디" aria-label="아이디">
+                        <input id="loginPwd" class="form-control mr-sm-2" type="search" placeholder="패스워드" aria-label="패스워드">
+                        <button id="loginBtn" class="btn btn-success my-2 my-sm-0" type="button">로그인</button>
+                        <button class="btn btn-success my-2 my-sm-0" type="button"><a href="/heresy/member/signup">회원가입</a></button>
+                    </div>
                 </div>
             </nav>
         </div>
+        <script th:inline="javascript">
+            $(document).ready(function(){
+                console.log($)
+            })
+        </script>
     </div>
 </body>
 </html>

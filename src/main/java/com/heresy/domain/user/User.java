@@ -7,11 +7,13 @@ import java.util.Date;
 @Data
 public class User {
 
-    private int idx;
+    private int useridx;
 
     private String userId;
 
     private String userNickName;
+
+    private String password;
 
     private int experience;
 

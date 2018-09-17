@@ -1,6 +1,7 @@
 package com.heresy.mapper;
 
 import com.heresy.domain.board.BasicBoardArticle;
+import com.heresy.domain.user.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -11,13 +12,13 @@ import java.util.List;
  **/
 
 @Transactional
-public interface BasicBoardArticleMapper {
+public interface UserMapper {
 
     List<BasicBoardArticle> select();
 
-    int insert(BasicBoardArticle basicBoardArticle);
+    int insert(User user);
 
-    int update(BasicBoardArticle basicBoardArticle);
+    int update(User user);
 
     int delete(int idx);
 

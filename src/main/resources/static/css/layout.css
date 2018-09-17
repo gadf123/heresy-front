@@ -47,9 +47,13 @@
 
 /*avatar*/
 .login-profile{
-    width:200px;
+    width:280px;
     color:white;
 }
+.login-profile.off{
+    display: none;
+}
+
 .login-profile > .login-avatar {
     vertical-align: middle;
     width: 30px;
@@ -59,9 +63,13 @@
 }
 
 .login-profile > .login-name {
-    width:80px;
+    width:150px;
     margin-left: 10px;
     font-size: 20px;
     font-weight: bolder;
     float : left;
+}
+
+.form-inline.off{
+    display : none;
 }

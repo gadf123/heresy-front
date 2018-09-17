@@ -5,12 +5,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class RestTestController {
+@RequestMapping("board")
+public class BoardController {
 
-    @RequestMapping("/getInfo")
+    @RequestMapping("/write")
     @CrossOrigin(origins = "*")
     @ResponseBody
-    public String getInfo(HttpServletResponse response,
+    public String write(HttpServletResponse response,
                               @RequestParam(value = "type", required = false) String askedType) {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Origin", "*");

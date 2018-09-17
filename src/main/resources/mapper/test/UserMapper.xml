@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.heresy.mapper.UserMapper">
+
+    <select id="selectOne" parameterType="Integer" resultType="com.heresy.domain.user.User">
+        SELECT
+            useridx, --int
+            userId,--string
+            userNickName, --string
+            password, --string
+            experience, --int
+            tendency, --int
+            introduction, --string
+            authSnsId, --string
+            createDate, --date
+            updateDate,--date
+        FROM USER
+        WHERE useridx = #{useridx}
+    </select>
+
+    <insert id="insert" parameterType="com.heresy.domain.user.User">
+        INSERT INTO USER
+            (
+            useridx, --int
+            userId,--string
+            usernickname, --string
+            password, --string
+            experience, --int
+            tendency, --int
+            introduction, --string
+            authsnsid, --string
+            createDate, --date
+            updateDate,--date
+            )
+        VALUES (
+              (select ifnull(max(a.USERIDX), 0)+1 from USER a)
+            , #{userId}
+            , #{userNickName}
+            , #{password}
+            , #{experience}
+            , #{tendency}
+            , #{introduction}
+            , #{authSnsId}
+            , CURRENT_TIMESTAMP()
+            , CURRENT_TIMESTAMP()
+            )
+    </insert>
+
+   <!-- <update id="update" parameterType="map">
+        UPDATE
+              BASICBOARDARTICLE
+        SET bad = #{bad}
+            , content = #{content}
+            , good = #{good}
+            , subBoardIdx = #{subBoardIdx}
+            , title = #{title}
+            , updateDate = CURRENT_TIMESTAMP()
+            , userNickName = #{userNickName}
+        WHERE idx = #{idx}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE
+        FROM
+          BASICBOARDARTICLE
+        WHERE idx = #{idx}
+    </delete>-->
+
+</mapper>
