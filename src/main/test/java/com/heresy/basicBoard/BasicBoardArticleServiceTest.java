@@ -29,7 +29,7 @@ public class BasicBoardArticleServiceTest {
 
     @Test
     public void select() throws Exception {
-        System.out.println(basicBoardArticleMapper.select());
+        System.out.println(basicBoardArticleMapper.selectAll());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class BasicBoardArticleServiceTest {
     @Test
     public void update() throws Exception {
         BasicBoardArticle basicBoardArticle = new BasicBoardArticle();
-        basicBoardArticle.setIdx(2);
+        basicBoardArticle.setArticleIdx(2);
         basicBoardArticle.setBad(2);
         basicBoardArticle.setSubBoardIdx(2);
         basicBoardArticle.setTitle("TESTTITLEUPDATE");

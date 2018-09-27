@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 @RestController
 @RequestMapping("/user")
@@ -32,15 +34,18 @@ public class UserController {
         return userService.insert(user) == 1? "success" : "fail";
     }
 
-    @RequestMapping("/usertest")
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     @CrossOrigin(origins = "*")
     @ResponseBody
-    public String userInfo(HttpServletResponse response,
-                          @RequestParam(value = "type", required = false) String askedType) {
+    public User userInfo(HttpServletResponse response,
+                          @RequestParam(value = "userId") String userId)
+    {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Origin", "*");
+        //String decodedUserId = URLDecoder.decode(userId, "UTF-8");
+        User user = userService.selectOne(userId);
 
-        return "RestTest";
+        return user;
     }
 }
 

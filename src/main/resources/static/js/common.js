@@ -1,14 +1,18 @@
 
 
 var ajaxCall = function(_url, _option, doneCallBack, failCallBack){
-    $.ajax({
-        url : _url,
-        method : _option.method ? _option.method : 'get',
-        data : _option.data? _option.data : {},
-        contentType: _option.contentType ? _option.contentType : "application/json",
+   $.ajax({
+       url : _url,
+       method : _option.method ? _option.method : 'get',
+       data : _option.data? _option.data : {},
+       contentType: _option.contentType ? _option.contentType : "application/json",
+       beforeSend : function(jqXHR, settings){
+           jqXHR.setRequestHeader('idToken', _option.idToken);
+           console.log(jqXHR, settings)
+       }
    }).done(function(data, textStatus, jqXHR) {
         if(jqXHR.status === 200 && jqXHR.statusText === "success"){
-            doneCallBack(jqXHR)
+            doneCallBack(data, jqXHR)
         }
    }).fail(function(jqXHR, textStatus, errorThrown) {
        failCallBack(jqXHR);
@@ -16,7 +20,7 @@ var ajaxCall = function(_url, _option, doneCallBack, failCallBack){
    });
 };
 
-var loginModule = function () {
+var userModule = function () {
     this.config = {
         apiKey: "AIzaSyDYR-dKMGjg2hAqqjijDie8ONylD4LZZCY",
         authDomain: "three-caliber.firebaseapp.com",
@@ -25,18 +29,12 @@ var loginModule = function () {
         storageBucket: "three-caliber.appspot.com",
         messagingSenderId: "440231935927"
     };
-
     this.firebase = firebase.initializeApp(this.config);
-    this.email = null;
-    this.userIdx = null;
-    this.userNickName = null;
-    this.getidEl = function(){
-        return this.getEl
-    }
 };
 
-loginModule.prototype.init = function(){
-    this.firebase.auth().onAuthStateChanged(function(user) {
+userModule.prototype.init = function(){
+    return new Promise(function(resolve, reject){
+        this.firebase.auth().onAuthStateChanged(function(user) {
         var loginedEl = $('.login-profile');
         var logoutedEl = $('.logout-profile'); //
         if (user) {
@@ -47,18 +45,8 @@ loginModule.prototype.init = function(){
             if(!logoutedEl.hasClass('off')){
                 logoutedEl.addClass('off')
             }
-
-            $('#login-id').text(user.email);
-
-            // User is signed in.
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
-            var photoURL = user.photoURL;
-            var isAnonymous = user.isAnonymous;
-            var uid = user.uid;
-            var providerData = user.providerData;
-
+            $('#login-id').text(user.email + "//" + user.displayName);
+            resolve(user);
         } else {
             // User is signed out.
             if(logoutedEl.hasClass('off')){
@@ -67,59 +55,72 @@ loginModule.prototype.init = function(){
             if(!loginedEl.hasClass('off')){
                 loginedEl.addClass('off')
             }
+            resolve("no user logined")
         }
-    });
+    })});
 };
-loginModule.prototype.logIn = function(_id,_pwd){
+userModule.prototype.logIn = function(_id, _pwd){
+    var _this = this;
     var logoutedEl = $('.logout-profile');
-    this.firebase
-        .auth()
-        .signInWithEmailAndPassword(_id, _pwd)
-        .then(function (_sth) {
-            if(!logoutedEl.hasClass('off')){
-                logoutedEl.addClass('off')
-            }
-            console.log(_sth)
+    _this.firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+        .then(function() {
+            return _this.firebase
+                .auth()
+                .signInWithEmailAndPassword(_id, _pwd)
+                .then(function (response) {
+                    if (!logoutedEl.hasClass('off')) {
+                        logoutedEl.addClass('off')
+                    }
+                    console.log(response)
+                })
+                .catch(function (error) {
+                    alert("firebase error" + error)
+                });
         })
-        .catch(function (error) {
-            console.log(error)
+        .catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
         });
+
 };
 
-loginModule.prototype.logOut = function(){
+userModule.prototype.logOut = function(){
     var loginedEl = $('.login-profile');
     this.firebase
         .auth()
         .signOut()
-        .then(function (sth) {
+        .then(function () {
             alert("firebase 로그아웃 완료");
             if(!loginedEl.hasClass('off')){
                 loginedEl.addClass('off')
             }
-            console.log(sth)
         })
         .catch(function (error) {
             console.log(error)
         });
 };
 
-loginModule.prototype.signUp = function (_userData) {
+userModule.prototype.signUp = function (_userData) {
     ajaxCall(
         "/user/signup",
         {
             method : "post",
             data : JSON.stringify(_userData)
         },
-        function(jqXHR){
+        function(data,jqXHR){
             alert("server save done")
             console.log(this)
             this.firebase
                 .auth()
                 .createUserWithEmailAndPassword(_userData.userId, _userData.password)
                 .then(function (res) {
-                    alert("firebase 회원가입 완료");
-                    console.log("------firebaseReturn--------")
-                    console.log(res);
+                    var user = firebase.auth().currentUser;
+                    user.updateProfile({
+                        displayName: _userData.userNickName
+                    }).then(function() {
+                        alert("firebase 회원가입 완료");
+                    }).catch(function(error) {
+                    });
                 })
                 .catch(function (error) {
                     if (error.code === "auth/invalid-email") {
@@ -133,15 +134,14 @@ loginModule.prototype.signUp = function (_userData) {
 
         },
         function(jqXHR){
-            alert("fail");
+            alert("server save fail")
             console.log(jqXHR)
         })
 };
 
-var userModule = new loginModule();
-userModule.init();
+var userModule = new userModule();
 
 $(document).ready(function(){
-    //$('#summernote').summernote();
     $('a[href="'+window.location.pathname+'"]').parent().addClass('active')
+
 });

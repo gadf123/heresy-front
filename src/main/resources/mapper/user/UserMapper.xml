@@ -5,35 +5,26 @@
 
 <mapper namespace="com.heresy.mapper.UserMapper">
 
-    <select id="selectOne" parameterType="Integer" resultType="com.heresy.domain.user.User">
+    <select id="selectOne" parameterType="String" resultType="com.heresy.domain.user.User">
         SELECT
-            useridx, --int
-            userId,--string
-            userNickName, --string
-            password, --string
-            experience, --int
-            tendency, --int
-            introduction, --string
-            authSnsId, --string
-            createDate, --date
-            updateDate,--date
+           *
         FROM USER
-        WHERE useridx = #{useridx}
+        WHERE userId = #{userId}
     </select>
 
     <insert id="insert" parameterType="com.heresy.domain.user.User">
         INSERT INTO USER
             (
-            useridx, --int
-            userId,--string
-            usernickname, --string
-            password, --string
-            experience, --int
-            tendency, --int
-            introduction, --string
-            authsnsid, --string
-            createDate, --date
-            updateDate,--date
+            useridx,
+            userId,
+            usernickname,
+            password,
+            experience,
+            tendency,
+            introduction,
+            authsnsid,
+            createDate,
+            updateDate
             )
         VALUES (
               (select ifnull(max(a.USERIDX), 0)+1 from USER a)

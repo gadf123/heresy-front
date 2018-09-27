@@ -146,17 +146,17 @@
 </body>
 <script th:inline="javascript">
     $(document).ready(function(){
-        ajaxCall('/getInfo',
-            {},
-            function(_jqXHR){
-                console.log(_jqXHR.responseText)
-                $('#testTr').click(function(){
-                    alert('click')
-                })
-            },
-            function(_jqXHR){
-                console.log(_jqXHR.responseText)
-            })
+//        ajaxCall('/getInfo',
+//            {},
+//            function(_jqXHR){
+//                console.log(_jqXHR.responseText)
+//                $('#testTr').click(function(){
+//                    alert('click')
+//                })
+//            },
+//            function(_jqXHR){
+//                console.log(_jqXHR.responseText)
+//            })
     });
 
 </script>

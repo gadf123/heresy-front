@@ -8,20 +8,20 @@
     <div class="container">
         <div style="height:900px">
             <div style="height :50px; padding : 21px; font-size :18px">
-                <span style="display :inline-block; width:80%;"}>
-                    타이틀
+                <span style="display :inline-block; width:80%;"} id="articleTitle">
+
                 </span>
                 <span style="display :inline-block; width : 15%;
-                            font-size : 13px; text-align : right">
-                    2018.08.18 05:00:00
+                            font-size : 13px; text-align : right" id="articleTime">
+
                 </span>
             </div>
             <div style="height :500px;
                     border-bottom : 2px solid #ababab;
                     border-top : 2px solid #ababab;
                     padding : 40px">
-                <div style="height :400px">
-                    내용
+                <div style="height :400px" id="articleContent">
+
                 </div>
                 <div style="text-align :center">
                     <button class="articleBtn btn btn-dark" type="button">
@@ -40,8 +40,51 @@
             </div>
             <div style="height :300px;
                     border-bottom : 2px solid #ababab;
-                    padding : 40px">
-                댓글 영역
+                    padding : 20px 40px 40px 40px;
+                    overflow-y: scroll">
+                <div style="margin-bottom: 20px;">
+                    <input type="text" style="width:88.9%; display: inline-block;"
+                           class="form-control"
+                           id="commentContent"
+                           aria-describedby="emailHelp" placeholder="댓글을 입력하세요">
+                    <button class="articleBtn btn btn-dark rewrite_link_to" type="button" id="commentWriteBtn">
+                        작성
+                    </button>
+                </div>
+                <ul class="comments">
+                    <li class="comment">
+                        <a href="#" title="View this user profile" class="photo">
+                            <img src="https://placehold.it/32x32" alt="Kasper">
+                        </a>
+                        <div class="meta">
+                            Kasper | 2012.07.24 14:58
+                            <a class="reply">Reply</a>
+                        </div>
+                        <div class="body">
+                            Cupcake ipsum dolor sit amet. Icing donut cheesecake muffin marzipan chocolate biscuit. Sweet roll chocolate marzipan.
+                        </div>
+                    </li>
+                    <li class="comment level-2">
+                        <a href="#" title="View this user profile" class="photo"><img src="https://placehold.it/32x32" alt="Photo"></a>
+                        <div class="meta">John | 2012.07.24 15:21 <a class="reply">Reply</a></div>
+                        <div class="body">Candy soufflé bear claw apple pie bear claw marshmallow. Jelly brownie wafer chocolate jelly.marzipan pastry sesame snaps apple pie.</div>
+                    </li>
+                    <li class="comment level-3">
+                        <a href="#" title="View this user profile" class="photo"><img src="https://placehold.it/32x32" alt="Photo"></a>
+                        <div class="meta">Jane | 2012.07.24 15:32 <a class="reply">Reply</a></div>
+                        <div class="body">Tart apple pie bonbon applicake sesame snaps sugar plum.</div>
+                    </li>
+                    <li class="comment level-4">
+                        <a href="#" title="View this user profile" class="photo"><img src="https://placehold.it/32x32" alt="Photo"></a>
+                        <div class="meta">Jane | 2012.07.24 15:32 <a class="reply">Reply</a></div>
+                        <div class="body">Tart apple pie bonbon applicake sesame snaps sugar plum.</div>
+                    </li>
+                    <li class="comment">
+                        <a href="#" title="View this user profile" class="photo"><img src="https://placehold.it/32x32" alt="Kasper"></a>
+                        <div class="meta">Kasper | 2012.07.24 14:58 <a class="reply">Reply</a></div>
+                        <div class="body">Cupcake ipsum dolor sit amet. Icing donut cheesecake muffin marzipan chocolate biscuit.</div>
+                    </li>
+                </ul>
             </div>
         </div>
 
@@ -49,13 +92,35 @@
 </div>
 </body>
 <script th:inline="javascript">
-    var linkTo = function(event){
-        location.href = "/heresy/politics/rewrite"
-    };
-
     $(document).ready(function(){
-        $('.rewrite_link_to').click(linkTo)
+        var linkTo = function(event){
+            location.href = "/heresy/politics/rewrite"
+        };
 
+        userModule.init().then(function (user) {
+            var url = new URL(window.location.href);
+            var articleIdx = url.searchParams.get("id");
+            ajaxCall(
+                '/board/getOneArticle'
+                , {data:{articleIdx : articleIdx}}
+                , function (data, jqXHR) {
+                    $('.rewrite_link_to').click(linkTo);
+                    $('#articleTitle').text(data.title);
+                    var time = new Date(data.createDate);
+
+                    $('#articleTime').text(time.toISOString().split('.')[0]
+                        .replace(/-/gi,'.')
+                        .replace('T',' '));
+                    var content = $.parseHTML(data.content);
+                    console.log(content);
+                    $('#articleContent').append(content)
+
+                }
+                , function (jqXHR) {
+                    alert("server view return error");
+                }
+            );
+        });
     });
 </script>
 </html>

@@ -19,63 +19,7 @@
                             <th scope="col">Date</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="list_link_to" id="1">
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr class="list_link_to" id="2">
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
+                    <tbody id="tableContent">
                     </tbody>
                 </table>
             </div>
@@ -111,14 +55,61 @@
 </div>
 </body>
 <script th:inline="javascript">
-    var linkTo = function(event){
-        location.href = "/heresy/politics/view?id="+$(this).attr('id')
-    };
 
+
+
+</script>
+<script th:inline="javascript">
     $(document).ready(function(){
-        $('.list_link_to').click(linkTo)
+        userModule.init().then(function(user){
+            console.log(user);
 
+            if($('#tableContent').children()){
+                $('#tableContent').empty()
+            }
+
+            function makeTableRow(rowItem){
+                var rows = rowItem.map(function (item, index) {
+                    var row = document.createElement('tr');
+                    row.setAttribute('class','list_link_to');
+                    row.setAttribute('id',item.articleIdx);
+                    Object.keys(item).map(function (columnName, index) {
+                        var column = null;
+                        if(index ===0){
+                            column = document.createElement('th');
+                        }else{
+                            column = document.createElement('td');
+                        }
+                        column.setAttribute('id', columnName+''+item.articleIdx);
+                        column.appendChild(document.createTextNode(item[columnName]))
+                        row.appendChild(column)
+                    });
+                    return row;
+                });
+                return rows;
+            }
+
+            ajaxCall(
+                '/board/getAllArticle'
+                , {}
+                , function (data, jqXHR) {
+                    var rows = makeTableRow(data)
+                    rows.map(function (row) {
+                        $('#tableContent').append(row)
+                    });
+
+                    var linkTo = function(event){
+                        location.href = "/heresy/politics/view?id="+$(this).attr('id')
+                    };
+
+                    $('.list_link_to').click(linkTo)
+                }
+                , function (jqXHR) {
+                    console.log(jqXHR)
+                    alert("server error")
+                }
+            );
+        });
     });
-
 </script>
 </html>

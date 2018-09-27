@@ -5,18 +5,30 @@
 
 <mapper namespace="com.heresy.mapper.BasicBoardArticleMapper">
 
-    <select id="select" resultType="com.heresy.domain.board.BasicBoardArticle">
+    <select id="selectAll" resultType="Map" >
         SELECT
-              bad
-            , content
-            , createDate
-            , subBoardIdxf
-            , subBoardIdx
+            articleIdx
             , title
-            , updatedate
-            , userIdx
             , userNickName
+            , good
+            , bad
+            , createDate
         FROM BASICBOARDARTICLE
+    </select>
+
+    <select id="selectOne" parameterType="Integer" resultType="com.heresy.domain.board.BasicBoardArticle">
+        SELECT
+        articleIdx
+        , bad
+        , content
+        , createDate
+        , subBoardIdx
+        , title
+        , updatedate
+        , userIdx
+        , userNickName
+        FROM BASICBOARDARTICLE
+        WHERE articleIdx = #{articleIdx}
     </select>
 
     <insert id="insert" parameterType="com.heresy.domain.board.BasicBoardArticle">

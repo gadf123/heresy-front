@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class BasicBoardArticle {
 
-    private int idx;
+    private int articleIdx;
 
     private int subBoardIdx;
 

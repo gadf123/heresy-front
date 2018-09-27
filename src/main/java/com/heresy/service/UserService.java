@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @user updown
+ * @user park
  * @date 2018. 9. 11.
  **/
 
@@ -21,8 +21,8 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
-    public List<BasicBoardArticle> select(User user) {
-        return userMapper.select();
+    public User selectOne(String userId) {
+        return userMapper.selectOne(userId);
     }
 
     public int insert(User user) {

@@ -1,5 +1,7 @@
 package com.heresy.controller;
 
+import com.google.firebase.auth.FirebaseAuthException;
+import com.heresy.annotations.AuthCheck;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,8 @@ public class IndexController {
 
     @RequestMapping("/{largeCate}/{midCate}")
     public String index(@PathVariable("largeCate") String largeCate,
-                        @PathVariable("midCate") String midCate) {
+                        @PathVariable("midCate") String midCate) throws FirebaseAuthException {
+
         return "/heresy/" +largeCate+"/"+midCate;
     }
 

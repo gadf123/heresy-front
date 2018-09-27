@@ -3,6 +3,7 @@ package com.heresy.mapper;
 import com.heresy.domain.board.BasicBoardArticle;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,12 +14,13 @@ import java.util.List;
 @Transactional
 public interface BasicBoardArticleMapper {
 
-    List<BasicBoardArticle> select();
+    List<HashMap<String,?>> selectAll();
+
+    BasicBoardArticle selectOne(int articleIdx);
 
     int insert(BasicBoardArticle basicBoardArticle);
 
     int update(BasicBoardArticle basicBoardArticle);
 
     int delete(int idx);
-
 }
