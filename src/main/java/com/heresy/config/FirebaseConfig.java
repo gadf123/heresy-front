@@ -9,6 +9,11 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 
+/**
+ * @user park
+ * @date 2018. 9. 25.
+ **/
+
 @Configuration
 public class FirebaseConfig {
 

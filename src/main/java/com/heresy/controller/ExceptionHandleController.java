@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * @user park
+ * @date 2018. 9. 27.
+ **/
+
 @RestControllerAdvice
 public class ExceptionHandleController {
 

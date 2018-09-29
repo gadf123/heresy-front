@@ -17,6 +17,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @user park
+ * @date 2018. 9. 25.
+ **/
+
 @Aspect
 @Component("AuthAspect")
 public class AuthAspect {

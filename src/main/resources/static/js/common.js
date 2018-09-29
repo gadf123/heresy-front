@@ -1,4 +1,10 @@
-
+var parseTime = function(_millisecondTime){
+    var time = new Date(_millisecondTime);
+    var parsedTime = time.toISOString().split('.')[0]
+        .replace(/-/gi,'.')
+        .replace('T',' ');
+    return parsedTime;
+};
 
 var ajaxCall = function(_url, _option, doneCallBack, failCallBack){
    $.ajax({
@@ -45,7 +51,7 @@ userModule.prototype.init = function(){
             if(!logoutedEl.hasClass('off')){
                 logoutedEl.addClass('off')
             }
-            $('#login-id').text(user.email + "//" + user.displayName);
+            $('#login-id').text(user.displayName);
             resolve(user);
         } else {
             // User is signed out.

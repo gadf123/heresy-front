@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * @user park
+ * @date 2018. 9. 27.
+ **/
+
 @RestController
 @RequestMapping("board")
 public class BoardController {

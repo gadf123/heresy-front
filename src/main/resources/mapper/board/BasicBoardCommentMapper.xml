@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.heresy.mapper.BasicBoardCommentMapper">
+
+    <select id="selectAll" parameterType="Integer" resultType="Map" >
+        SELECT * FROM BasicBoardComment
+          WHERE articleIdx = #{articleIdx}
+            ORDER BY groupNum DESC, sequence ASC;
+
+    </select>
+
+    <select id="selectOne" parameterType="Integer" resultType="com.heresy.domain.board.BasicBoardArticle">
+        SELECT
+        articleIdx
+        , bad
+        , content
+        , createDate
+        , subBoardIdx
+        , title
+        , updatedate
+        , userIdx
+        , userNickName
+        FROM BASICBOARDARTICLE
+        WHERE articleIdx = #{articleIdx}
+    </select>
+
+    <insert id="insert" parameterType="com.heresy.domain.board.BasicBoardComment">
+        INSERT INTO BasicBoardComment
+        (
+        articleIdx
+        , userIdx
+        , comment
+        , good
+        , bad
+        , createdate
+        , updatedate
+        , groupNum
+        , sequence
+        , depth
+        )
+        VALUES (
+        #{articleIdx}
+        , #{userIdx}
+        , #{comment}
+        , #{good}
+        , #{bad}
+        , CURRENT_TIMESTAMP()
+        , CURRENT_TIMESTAMP()
+        <choose>
+                <when test="groupNum == 0">
+                    , (SELECT ifnull(max(a.groupNum),0)+1
+                        FROM BasicBoardComment a
+                        WHERE articleIdx = #{articleIdx})
+                </when>
+                <otherwise>
+                    , #{groupNum}
+                </otherwise>
+            </choose>
+            , #{sequence}
+            , #{depth}
+        )
+    </insert>
+
+    <update id="updateSequence" parameterType="com.heresy.domain.board.BasicBoardComment">
+        UPDATE
+              BasicBoardComment
+        SET sequence = sequence + 1
+        WHERE groupNum = #{groupNum}
+          AND sequence > #{sequence}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE
+        FROM
+          BASICBOARDARTICLE
+        WHERE idx = #{idx}
+    </delete>
+
+
+
+</mapper>

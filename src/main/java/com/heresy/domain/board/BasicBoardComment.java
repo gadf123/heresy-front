@@ -7,13 +7,11 @@ import java.util.Date;
 @Data
 public class BasicBoardComment {
 
-    private int idx;
+    private int commentIdx;
 
     private int articleIdx;
 
     private int userIdx;
-
-    private String userNickName;
 
     private String comment;
 
@@ -25,4 +23,9 @@ public class BasicBoardComment {
 
     private Date updateDate;
 
+    private int groupNum;
+
+    private int sequence;
+
+    private int depth;
 }

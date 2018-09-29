@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+/**
+ * @user park
+ * @date 2018. 9. 7.
+ **/
+
 @RestController
 @RequestMapping("/user")
 public class UserController {

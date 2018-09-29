@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/config :: configFragment">
+</head>
+<body>
+<div th:replace="layout/header :: header"></div>
+<div class="content">
+    <div class="container">
+        <div style="height:700px">
+            <div style="padding-top: 50px; height: 600px;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Like</th>
+                            <th scope="col">DisLike</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableContent">
+                    </tbody>
+                </table>
+            </div>
+            <div class="paging" style="height: 50px;">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="#">이전</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">다음</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div style="float: right; height: 50px;">
+                <button type="button" class="btn btn-dark"
+                        onclick="location.href = '/heresy/game/write'">
+                    글쓰기
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+
+
+
+</script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        userModule.init().then(function(user){
+            console.log(user);
+
+            if($('#tableContent').children()){
+                $('#tableContent').empty()
+            }
+
+            function makeTableRow(rowItem){
+                var rows = rowItem.map(function (item, index) {
+                    var row = document.createElement('tr');
+                    row.setAttribute('class','list_link_to');
+                    row.setAttribute('id',item.articleIdx);
+                    Object.keys(item).map(function (columnName, index) {
+                        var column = null;
+                        if(index ===0){
+                            column = document.createElement('th');
+                        }else{
+                            column = document.createElement('td');
+                        }
+                        column.setAttribute('id', columnName+''+item.articleIdx);
+                        column.appendChild(document.createTextNode(item[columnName]))
+                        row.appendChild(column)
+                    });
+                    return row;
+                });
+                return rows;
+            }
+
+            ajaxCall(
+                '/board/getAllArticle'
+                , {}
+                , function (data, jqXHR) {
+                    var rows = makeTableRow(data)
+                    rows.map(function (row) {
+                        $('#tableContent').append(row)
+                    });
+
+                    var linkTo = function(event){
+                        location.href = "/heresy/game/view?id="+$(this).attr('id')
+                    };
+
+                    $('.list_link_to').click(linkTo)
+                }
+                , function (jqXHR) {
+                    console.log(jqXHR)
+                    alert("server error")
+                }
+            );
+        });
+    });
+</script>
+</html>
