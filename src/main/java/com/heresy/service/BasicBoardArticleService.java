@@ -24,6 +24,10 @@ public class BasicBoardArticleService {
         return basicBoardArticleMapper.selectAll();
     }
 
+    public List<HashMap<String, ?>> selectWithOffset(HashMap parameters) {
+        return basicBoardArticleMapper.selectWithOffset(parameters);
+    }
+
     public BasicBoardArticle selectOne(int articleIdx) {
         return basicBoardArticleMapper.selectOne(articleIdx);
     }

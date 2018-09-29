@@ -4,6 +4,7 @@ import com.heresy.annotations.AuthCheck;
 import com.heresy.domain.board.BasicBoardArticle;
 import com.heresy.domain.user.User;
 import com.heresy.service.BasicBoardArticleService;
+import com.heresy.utills.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -43,11 +44,25 @@ public class BoardController {
     @RequestMapping("/getAllArticle")
     @CrossOrigin(origins = "*")
     @ResponseBody
-    public List<HashMap<String, ?>> getAllArticle(HttpServletResponse response, User user){
+    public HashMap<String, Object> getAllArticle(HttpServletResponse response,
+                                                  @RequestParam(value = "pageSize") int pageSize,
+                                                  @RequestParam(value = "currentPage") int currentPage){
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Origin", "*");
 
-        return basicBoardArticleService.selectAll();
+        int totalSize = basicBoardArticleService.selectAll().size();
+        Pagination pagination = new Pagination(pageSize, totalSize, currentPage);
+
+        HashMap<String, Integer> parameters = new HashMap<>();
+        parameters.put("offSet", pagination.getOffset());
+        parameters.put("pageSize", pageSize);
+        List<HashMap<String, ?>> contentList = basicBoardArticleService.selectWithOffset(parameters);
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("contentList", contentList);
+        result.put("pagination", pagination);
+
+        return result;
     }
 
     @RequestMapping("/getOneArticle")

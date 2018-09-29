@@ -6,6 +6,49 @@ var parseTime = function(_millisecondTime){
     return parsedTime;
 };
 
+var makePagination = function(pageData, currentPage){
+    var pages = new Array();
+    var url = new URL(window.location.href).pathname;
+
+    if(Number(currentPage) !== 1){
+        var prev= $(document.createElement('li'))
+                .attr('class','page-item prev')
+                .append($(document.createElement('a')).attr(
+                    {
+                        class : "page-link",
+                        href : url +'?page='+(Number(currentPage)-1)
+                    }
+                ).text('이전'));
+        pages.push(prev)
+    }
+
+    for(var i=1; i<= pageData.totalPage; i++){
+        var page= $(document.createElement('li'))
+            .attr('class','page-item')
+            .append($(document.createElement('a')).attr(
+                {
+                    class : "page-link",
+                    href : url +'?page='+i
+                }
+            ).text(i));
+        pages.push(page);
+    }
+
+    if(Number(currentPage) < pageData.totalPage){
+        var next= $(document.createElement('li'))
+            .attr('class','page-item next')
+            .append($(document.createElement('a')).attr(
+                {
+                    class : "page-link",
+                    href : url +'?page='+(Number(currentPage)+1)
+                }
+            ).text('다음'));
+        pages.push(next)
+    }
+
+    return pages;
+};
+
 var ajaxCall = function(_url, _option, doneCallBack, failCallBack){
    $.ajax({
        url : _url,
@@ -38,7 +81,7 @@ var userModule = function () {
     this.firebase = firebase.initializeApp(this.config);
 };
 
-userModule.prototype.init = function(){
+userModule.prototype.init = function(pageView){
     return new Promise(function(resolve, reject){
         this.firebase.auth().onAuthStateChanged(function(user) {
         var loginedEl = $('.login-profile');
@@ -63,6 +106,7 @@ userModule.prototype.init = function(){
             }
             resolve("no user logined")
         }
+        pageView(user);
     })});
 };
 userModule.prototype.logIn = function(_id, _pwd){
@@ -148,6 +192,13 @@ userModule.prototype.signUp = function (_userData) {
 var userModule = new userModule();
 
 $(document).ready(function(){
-    $('a[href="'+window.location.pathname+'"]').parent().addClass('active')
+    var currentUrlPart = new URL(window.location.href).pathname.split('/');
+    var headers = $('#headNav').find('a');
+
+    headers.toArray().forEach(function(item){
+        if(item.href.indexOf(currentUrlPart[2]) > 0){
+            $(item).parent().addClass('active')
+        }
+    });
 
 });

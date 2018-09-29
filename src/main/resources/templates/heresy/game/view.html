@@ -65,7 +65,7 @@
 <script th:inline="javascript">
     $(document).ready(function(){
         var linkTo = function(event){
-            location.href = "/heresy/politics/rewrite"
+            location.href = "/heresy/game/rewrite"
         };
 
         var url = new URL(window.location.href);
@@ -222,7 +222,7 @@
         };
 
         userModule.init().then(function (user) {
-            $('.list_link_to').click(function(){ location.href = '/heresy/politics/board'});
+            $('.list_link_to').click(function(){ location.href = '/heresy/game/board'});
             ajaxCall(
                 '/board/getOneArticle'
                 , {data:{articleIdx : articleIdx}}

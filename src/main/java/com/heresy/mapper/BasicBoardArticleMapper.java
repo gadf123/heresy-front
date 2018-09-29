@@ -23,4 +23,6 @@ public interface BasicBoardArticleMapper {
     int update(BasicBoardArticle basicBoardArticle);
 
     int delete(int idx);
+
+    List<HashMap<String,?>> selectWithOffset(HashMap parameters);
 }

@@ -16,6 +16,18 @@
         FROM BASICBOARDARTICLE
     </select>
 
+    <select id="selectWithOffset" parameterType="Map" resultType="Map" >
+        SELECT
+        articleIdx
+        , title
+        , userNickName
+        , good
+        , bad
+        , createDate
+        FROM BASICBOARDARTICLE
+        ORDER BY createDate DESC
+        LIMIT #{offSet},#{pageSize}
+    </select>
     <select id="selectOne" parameterType="Integer" resultType="com.heresy.domain.board.BasicBoardArticle">
         SELECT
         articleIdx
