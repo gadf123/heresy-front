@@ -4,34 +4,28 @@
     </head>
     <body>
         <div th:replace="layout/header :: header"></div>
-        <div class="container" style="margin-top:20px;">
-            <h2>회원가입</h2>
-            <div>
-                <div class="row justify-content-md-center" style="margin:10px 00px;">
-                    <div style="width:100px;float:left">아이디</div>
-                    <input type="text" id="inputId">
+        <div class="container mt-4">
+            <p class="h2 mb-4">회원가입</p>
+            <form class="w-75 mx-auto">
+                <div class="form-group">
+                    <label for="inputEmail">ID(E-Mail)</label>
+                    <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter your e-mail">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
-
-                <div class="row justify-content-md-center" style="margin:10px 0px;">
-                    <div style="width:100px;float:left">닉네임</div>
-                    <input type="text" id="inputNickName">
+                <div class="form-group">
+                    <label for="inputNickname">Nickname</label>
+                    <input type="nickname" class="form-control" id="inputNickname" placeholder="Enter nickname">
                 </div>
-
-                <div class="row justify-content-md-center" style="margin:10px 0px;">
-                    <div style="width:100px;float:left">패스워드</div>
-                    <input type="password" id="inputPwd">
+                <div class="form-group">
+                    <label for="inputPassword">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                    <input type="password" class="form-control mt-1" id="inputPasswordVerification" placeholder="Re-Enter Password">
                 </div>
-
-                <div class="row justify-content-md-center" style="margin:10px 0px;">
-                    <div style="width:100px;float:left">패스워드 확인</div>
-                    <input type="password" id="inputRePwd">
+                <div class="float-right">
+                    <button type="submit" class="btn btn-primary">SignUp</button>
+                    <button type="button" class="btn btn-light">Cancel</button>
                 </div>
-
-                <div class="row justify-content-md-center" style="">
-                    <button><a href="/heresy/home">취소</a></button>
-                    <button id="signUpSubmit">동의</button>
-                </div>
-            </div>
+            </form>
         </div>
     </body>
     <script th:inline="javascript">
@@ -39,9 +33,9 @@
             $('#signUpSubmit').click(function(){
                 //if(confirm("회원가입을 완료하시겠습니까?")){
                 var UserData = {
-                    "userId": $('#inputId').val(),
+                    "userId": $('#inputEmail').val(),
                     "userNickName": $('#inputNickName').val(),
-                    "password": $('#inputPwd').val()
+                    "password": $('#inputPassword').val()
                 };
                 userModule.signUp(UserData);
                 //}

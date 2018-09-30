@@ -2,55 +2,57 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <div th:fragment="header">
-        <div id="header">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">3Caliber</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div th:fragment="header">
+            <div id="header" class="w-100">
+                <nav class="navbar navbar-expand-lg navbar-light">
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto" id="headNav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/heresy/home">쌈구경</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/heresy/politics/board?page=1">정치</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/heresy/free/board?page=1">자유</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/heresy/game/board?page=1">게임</a>
-                        </li>
-                    </ul>
-                    <div class="login-profile off">
-                        <img th:src="@{/img/avatar.png}" alt="Avatar" class="login-avatar">
-                        <div class="login-name">
-                            <span id="login-id">rolld</span>
+                    <a class="navbar-brand" href="#">3Caliber</a>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse ml-5" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto" id="headNav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/heresy/home">쌈구경</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/heresy/politics/board?page=1">정치</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/heresy/free/board?page=1">자유</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/heresy/game/board?page=1">게임</a>
+                            </li>
+                        </ul>
+
+                        <div>
+                            <button id="loginBtn" class="btn btn-outline-light" type="button">로그인</button>
+                            <a class="btn btn-outline-light" role="button" href="/heresy/member/signup">회원가입</a>
                         </div>
-                        <button id="logoutBtn" class="btn btn-success my-2 my-sm-0" type="button">로그아웃</button>
+
+                        <div class="login-profile off">
+                            <img th:src="@{/img/avatar.png}" alt="Avatar" class="login-avatar">
+                            <div class="login-name">
+                                <span id="login-id">rolld</span>
+                            </div>
+                            <button id="logoutBtn" class="btn btn-success my-2 my-sm-0" type="button">로그아웃</button>
+                        </div>
                     </div>
-                    <div class="form-inline my-2 my-lg-0 logout-profile off">
-                        <input id="loginId" class="form-control mr-sm-2" type="search" placeholder="아이디" aria-label="아이디">
-                        <input id="loginPwd" class="form-control mr-sm-2" type="search" placeholder="패스워드" aria-label="패스워드">
-                        <button id="loginBtn" class="btn btn-success my-2 my-sm-0" type="button">로그인</button>
-                        <button class="btn btn-success my-2 my-sm-0" type="button"><a href="/heresy/member/signup">회원가입</a></button>
-                    </div>
-                </div>
-            </nav>
+                </nav>
+            </div>
+            <script th:inline="javascript">
+                $(document).ready(function(){
+                    console.log($)
+                })
+            </script>
         </div>
-        <script th:inline="javascript">
-            $(document).ready(function(){
-                console.log($)
-            })
-        </script>
-    </div>
-</body>
+    </body>
 </html>

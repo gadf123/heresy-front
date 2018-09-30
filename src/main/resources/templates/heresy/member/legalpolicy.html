@@ -4,9 +4,9 @@
     </head>
     <body>
         <div th:replace="layout/header :: header"></div>
-        <div class="container" style="margin-top:20px;">
-            <h2>이용약관</h2>
-            <div class="form-group" style="height:500px;border:1px solid #ccc;overflow-y:scroll;">
+        <div class="container mt-4">
+            <p class="h2 mb-4">이용약관</p>
+            <div class="border p-3" style="height:500px;overflow-y:scroll;">
                 <pre style="white-space: pre-wrap;">
 삼구경 이용약관
 
@@ -125,9 +125,9 @@
                 </pre>
             </div>
 
-            <div>
-                <button>취소</button>
-                <button>동의</button>
+            <div class="float-right mt-3">
+                <button type="button" class="btn btn-primary">동의</button>
+                <button type="button" class="btn btn-light">취소</button>
             </div>
         </div>
     </body>
