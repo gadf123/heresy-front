@@ -12,7 +12,7 @@
             </div>
             <div class="col align-self-center">
                 <button type="button" class="btn btn-outline-dark btn-sm float-right" id="boardWriteBtn"
-                        onclick="location.href = '/heresy/politics/write'">글쓰기</button>
+                        onclick="location.href = '/heresy/caliber/write'">글쓰기</button>
             </div>
         </div>
 
@@ -70,7 +70,7 @@
                 '/agendaBoard/getAllArticle'
                 , {
                     data : {
-                        pageSize : 10,
+                        pageSize : 20,
                         currentPage : currentPage
                     }
                 }
@@ -89,14 +89,13 @@
                     $('#pagination').append(pagination);
 
                     var linkTo = function(event){
-                        location.href = "/heresy/politics/view?id=" + $(this).attr('id');
+                        location.href = "/heresy/caliber/view?id=" + $(this).attr('id');
                     };
 
                     $('.list_link_to').click(linkTo)
                 }
                 , function (jqXHR) {
                     console.log(jqXHR);
-                    alert("server error")
                 }
             );
         };

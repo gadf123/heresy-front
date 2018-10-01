@@ -11,19 +11,18 @@
                 <div>
                     <input type="text"
                            class="form-control"
-                           id="exampleInputEmail1"
+                           id="articleTitle"
                            aria-describedby="emailHelp" placeholder="제목을 입력하세요">
                 </div>
                 <div style="margin-top: 20px;">
                     <div id="summernote"></div>
                 </div>
                 <div style="float: right; height: 50px; margin-top: 30px;">
-                    <button type="button" class="btn btn-dark"
-                            onclick="location.href = '/heresy/politics/write'">
+                    <button type="button" class="btn btn-dark" id="writeBtn">
                         작성완료
                     </button>
                     <button type="button" class="btn btn-dark"
-                            onclick="location.href = '/heresy/politics/board'">
+                            onclick="location.href = '/heresy/free/board'">
                         목록으로
                     </button>
                 </div>
@@ -34,11 +33,59 @@
 </body>
 <script th:inline="javascript">
     $(document).ready(function(){
+
         $('#summernote').summernote({
             tabsize: 2,
             height: 400,
             maxHeight : 400
         });
+
+        $('#writeBtn').click(function(){
+            console.log(userModule)
+            console.log($('#summernote').summernote('code'))
+            if($('#articleTitle').val() === ''){
+                alert("제목은 필수 입니다.")
+                return false;
+            }
+
+            var articleData = {
+                "title": $('#articleTitle').val(),
+                "content" : $('#summernote').summernote('code'),
+            };
+
+            userModule
+                .firebase
+                .auth()
+                .currentUser
+                .getIdToken(true)
+                .then(function(firebaseIdToken) {
+                    console.log(firebaseIdToken)
+                    ajaxCall(
+                        '/board/write'
+                        ,{
+                            method : 'post',
+                            data : JSON.stringify(articleData),
+                            idToken : firebaseIdToken
+                        }
+                        ,function(data,jqXHR){
+                            console.log(data)
+                            alert("write done")
+                        }
+                        ,function(jqXHR){
+                            console.log(jqXHR)
+                            alert("server error")
+                        }
+                    )
+                }).catch(function(error) {
+                    // Handle error
+                    alert(0)
+                });
+
+
+
+        });
     });
+
+
 </script>
 </html>

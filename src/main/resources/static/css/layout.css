@@ -230,3 +230,69 @@ body{
 .comments .level-4 .photo:before { width: 60px; left: -50px;}
 .comments .level-5 .photo:before { width: 80px; left: -70px;}
 .comments .level-6 .photo:before { width: 100px; left: -90px;}
+
+/*agenda view*/
+.agenda-board {
+    height : 1300px;
+}
+
+.agenda-board .debate-wrapper{
+    height :700px;
+    padding : 0px 40px 0px 40px;
+    overflow-y: scroll;
+}
+.debate-wrapper > .row{
+    height :100%;
+}
+.debate-wrapper .debate-section{
+    background-color: rgba(0, 0, 0, 0.03);
+    padding : 10px;
+}
+.debate-wrapper .debate-section:not(:last-child){
+    margin-right: 20px;
+}
+
+.debate-wrapper .debate-content-row{
+    height: 80px;
+}
+
+.debate-content-row .debate-content-title{
+    height: 25px;
+}
+
+.debate-content-row .debate-content-title #debate-content-title-date{
+    float: right;
+}
+
+#debate-content-title-date::after{
+    clear: both;
+}
+
+.debate-content-row .debate-content-body{
+    height: 55px;
+}
+
+.debate-content-row .debate-content-body > .col-no-padding-right{
+    padding-right: 0px;
+}
+
+.debate-content-row .debate-content-body .debate-content-body-text{
+    word-wrap: break-word;
+    overflow-y: scroll;
+    height : 100%;
+}
+
+.debate-content-row .debate-content-body .debate-content-body-buttons{
+    text-align: center;
+    padding-top: 6px;
+}
+
+.debate-content-row .debate-content-body .debate-content-body-buttons > img{
+    width:30px;
+    height:30px;
+    display: inline-block;
+}
+
+.debate-content-body-buttons > img:first-child{
+    margin-right: 5px;
+}

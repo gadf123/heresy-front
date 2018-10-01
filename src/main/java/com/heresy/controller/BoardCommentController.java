@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("basicComment")
-public class CommentController {
+public class BoardCommentController {
 
     @Autowired
     BasicBoardCommentService basicBoardCommentService;

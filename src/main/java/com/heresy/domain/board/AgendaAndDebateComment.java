@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class AgendaAndDebateComment {
 
-    private int idx;
+    private int commentIdx;
 
     private int articleIdx;
 

@@ -2,7 +2,7 @@ var parseDate = function(_millisecondTime){
     var time = new Date(_millisecondTime);
     var datePart = time.toLocaleDateString('ko-KR').replace(/ /gi,'').split('\.');
     var parsedDate = datePart[0] + (datePart[1] < 10 ? '-0' : '-')
-                     + datePart[1] + '-'
+                     + datePart[1] + (datePart[2] < 10 ? '-0' : '-')
                      + datePart[2];
     return parsedDate;
 };

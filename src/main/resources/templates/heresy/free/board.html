@@ -6,119 +6,103 @@
 <div th:replace="layout/header :: header"></div>
 <div class="content">
     <div class="container">
-        <div style="height:700px">
-            <div style="padding-top: 50px; height: 600px;">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Author</th>
-                            <th scope="col">Like</th>
-                            <th scope="col">DisLike</th>
-                            <th scope="col">Date</th>
+        <div class="row mt-3 ml-1">
+            <div class="col">
+                <div class="h2 font-weight-bold">게임</div>
+            </div>
+            <div class="col align-self-center">
+                <button type="button" class="btn btn-outline-dark btn-sm float-right" id="boardWriteBtn"
+                        onclick="location.href = '/heresy/free/write'">글쓰기</button>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col board">
+                <table class="table table-hover table-sm">
+                    <thead class="table-borderless text-center">
+                        <tr id="tableHead">
+                            <td scope="col" class="tcb-board-no" id="articleIdx">번호</td>
+                            <td scope="col" class="tcb-board-title" id="title">제목</td>
+                            <td scope="col" id="userNickName">작성자</td>
+                            <td scope="col" id="good">추천</td>
+                            <!--<td scope="col" id="bad">DisLike</td>-->
+                            <td scope="col" id="createDate">작성일</td>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="list_link_to" id="1">
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr class="list_link_to" id="2">
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
+                    <tbody id="tableContent" class="text-center">
+
                     </tbody>
                 </table>
             </div>
-            <div class="paging" style="height: 50px;">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item">
-                            <a class="page-link" href="#">이전</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">다음</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div style="float: right; height: 50px;">
-                <button type="button" class="btn btn-dark"
-                        onclick="location.href = '/heresy/politics/write'">
-                    글쓰기
-                </button>
+
+        </div>
+
+        <div class="row">
+            <div class="col justify-content-center paging">
+                <ul class="pagination justify-content-center" id="pagination">
+                </ul>
             </div>
         </div>
     </div>
 </div>
 </body>
 <script th:inline="javascript">
-    var linkTo = function(event){
-        location.href = "/heresy/politics/view?id="+$(this).attr('id')
-    };
 
+
+
+</script>
+<script th:inline="javascript">
     $(document).ready(function(){
-        $('.list_link_to').click(linkTo)
 
+        var url = new URL(window.location.href);
+        var currentPage = url.searchParams.get("page");
+
+        var pageView = function(user){
+          if(user){
+              $('#boardWriteBtn').css('display','block');
+          }else{
+              $('#boardWriteBtn').css('display','none');
+          }
+        };
+
+        var drawTable = function(){
+            ajaxCall(
+                '/board/getAllArticle'
+                , {
+                    data : {
+                        pageSize : 20,
+                        currentPage : currentPage
+                    }
+                }
+                , function (data, jqXHR) {
+
+                    if($('#tableContent').children()){
+                        $('#tableContent').empty();
+                    }
+
+                    var rows = makeTableRow(data.contentList);
+                    rows.map(function (row) {
+                        $('#tableContent').append(row);
+                    });
+
+                    var pagination = makePagination(data.pagination, currentPage);
+                    $('#pagination').append(pagination);
+
+                    var linkTo = function(event){
+                        location.href = "/heresy/free/view?id=" + $(this).attr('id');
+                    };
+                    $('.list_link_to').click(linkTo)
+                }
+                , function (jqXHR) {
+                    console.log(jqXHR);
+                }
+            );
+        };
+
+        userModule.init(pageView).then(function(user){
+            console.log(user);
+            drawTable();
+        });
     });
-
 </script>
 </html>

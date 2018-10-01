@@ -25,10 +25,6 @@ public class BasicBoardCommentService {
         return basicBoardCommentMapper.selectAll(articleID);
     }
 
-    /*public BasicBoardComment selectOne(int articleIdx) {
-        return basicBoardCommentMapper.selectOne(articleIdx);
-    }*/
-
     public int insert(BasicBoardComment basicBoardComment) {
         return basicBoardCommentMapper.insert(basicBoardComment);
     }

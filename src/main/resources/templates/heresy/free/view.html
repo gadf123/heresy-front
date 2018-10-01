@@ -8,20 +8,20 @@
     <div class="container">
         <div style="height:900px">
             <div style="height :50px; padding : 21px; font-size :18px">
-                <span style="display :inline-block; width:80%;"}>
-                    타이틀
+                <span style="display :inline-block; width:80%;"} id="articleTitle">
+
                 </span>
                 <span style="display :inline-block; width : 15%;
-                            font-size : 13px; text-align : right">
-                    2018.08.18 05:00:00
+                            font-size : 13px; text-align : right" id="articleTime">
+
                 </span>
             </div>
             <div style="height :500px;
                     border-bottom : 2px solid #ababab;
                     border-top : 2px solid #ababab;
                     padding : 40px">
-                <div style="height :400px">
-                    내용
+                <div style="height :400px" id="articleContent">
+
                 </div>
                 <div style="text-align :center">
                     <button class="articleBtn btn btn-dark" type="button">
@@ -36,12 +36,26 @@
                     <button class="articleBtn btn btn-dark" type="button">
                         삭제
                     </button>
+                    <button class="articleBtn btn btn-dark list_link_to" type="button">
+                        목록으로
+                    </button>
                 </div>
             </div>
             <div style="height :300px;
                     border-bottom : 2px solid #ababab;
-                    padding : 40px">
-                댓글 영역
+                    padding : 20px 40px 40px 40px;
+                    overflow-y: scroll">
+                <div style="margin-bottom: 20px;">
+                    <input type="text" style="width:88.9%; display: inline-block;"
+                           class="form-control"
+                           id="commentContent"
+                           aria-describedby="emailHelp" placeholder="댓글을 입력하세요">
+                    <button class="articleBtn btn btn-dark" type="button" id="commentWriteBtn">
+                        작성
+                    </button>
+                </div>
+                <ul class="comments" id="commentsView">
+                </ul>
             </div>
         </div>
 
@@ -49,13 +63,196 @@
 </div>
 </body>
 <script th:inline="javascript">
-    var linkTo = function(event){
-        location.href = "/heresy/politics/rewrite"
-    };
-
     $(document).ready(function(){
-        $('.rewrite_link_to').click(linkTo)
+        var linkTo = function(event){
+            location.href = "/heresy/free/rewrite"
+        };
 
+        var url = new URL(window.location.href);
+        var articleIdx = url.searchParams.get("id");
+
+        var writeComment = function(){
+            var commentData = {
+                articleIdx : articleIdx,
+                comment : $('#commentContent').val()
+            };
+            userModule
+                .firebase
+                .auth()
+                .currentUser
+                .getIdToken(true)
+                .then(function(firebaseIdToken) {
+                    console.log(firebaseIdToken)
+                    ajaxCall(
+                        '/basicComment/Write'
+                        ,{
+                            method : 'post',
+                            data : JSON.stringify(commentData),
+                            idToken : firebaseIdToken
+                        }
+                        ,function(data,jqXHR){
+                            makeCommentView();
+                        }
+                        ,function(jqXHR){
+                            console.log(jqXHR);
+                            alert("server error")
+                        }
+                    )
+                })
+                .catch(function(error) {
+                    // Handle error
+                    alert('firebase token getting error')
+                });
+        };
+        var reWriteComment = function(){
+            var recommentData = {
+                articleIdx : articleIdx,
+                comment : $(this).parent().find('input').val(),
+                groupNum : $(this).parent().data('groupNum'),
+                depth: $(this).parent().data('depth')+1,
+                sequence : $(this).parent().data('sequence')
+            };
+
+            userModule
+                .firebase
+                .auth()
+                .currentUser
+                .getIdToken(true)
+                .then(function(firebaseIdToken) {
+                    console.log(firebaseIdToken)
+                    ajaxCall(
+                        '/basicComment/Rewrite'
+                        ,{
+                            method : 'post',
+                            data : JSON.stringify(recommentData),
+                            idToken : firebaseIdToken
+                        }
+                        ,function(data,jqXHR){
+                            makeCommentView();
+                        }
+                        ,function(jqXHR){
+                            console.log(jqXHR);
+                            alert("server error")
+                        }
+                    )
+                })
+                .catch(function(error) {
+                    // Handle error
+                    alert('firebase token getting error')
+                });
+        };
+
+        var makeCommentView = function(){
+            ajaxCall(
+                '/basicComment/selectAll'
+                , {data:{articleIdx : articleIdx}}
+                , function (data, jqXHR) {
+                    var commentsView = $('#commentsView');
+                    if(commentsView.children()){
+                        commentsView.empty();
+                    }
+
+                     data.map(function(comment){
+
+                        var li = $(document.createElement('li')).attr({
+                            'class' : comment.depth === 0? 'comment' : 'comment level-'+(comment.depth+1)
+                        });
+
+                        var photo = $(document.createElement('a')).attr({
+                            href : 'javascript:void(0)',
+                            title : 'profile',
+                            class : 'photo'
+                        });
+
+                        var img = $(document.createElement('img')).attr({
+                            src : 'https://placehold.it/32x32',
+                            alt : comment.userIdx
+                        });
+                        photo.append(img);
+
+                        var meta = $(document.createElement('div')).attr({
+                            class : 'meta'
+                        }).text(comment.userIdx + ' | ' + parseDateWithTime(comment.createDate));
+
+                        var reply = $(document.createElement('a')).attr({
+                            class : 'reply'
+                        }).text('Reply');
+                        //meta.append(reply);
+
+                        var body = $(document.createElement('div')).attr({
+                            class : 'body'
+                        }).text(comment.comment);
+
+                        var reWriteArea = $(document.createElement('div')).attr({
+                            style : 'margin-top: 20px;'
+                        }).data({
+                            'groupNum' : comment.groupNum,
+                            'depth'    : comment.depth,
+                            'sequence' : comment.sequence
+                        });
+
+                        var reWriteInput = $(document.createElement('input')).attr({
+                            type                : 'text' ,
+                            style               : 'width:85%; display: inline-block;',
+                            class               : 'form-control',
+                            id                  : 'recommentContent',
+                            'aria-describedby'  : 'recomment' ,
+                            placeholder         : '대댓글을 입력하세요'
+                        }).keypress(function(e){
+                            if (e.which === 13) {
+                                console.log(this)
+                                reWriteComment.call(this)
+                                return false;    //<---- Add this line
+                            }
+                        });
+
+                         var reWriteButton = $(document.createElement('button')).attr({
+                             class : 'articleBtn btn btn-dark',
+                             type  : 'button'
+                         }).text('작성').click(reWriteComment);
+                         reWriteArea.append(reWriteInput).append(reWriteButton);
+
+                         commentsView.append(li.append(photo).append(meta).append(body).append(reWriteArea));
+                    });
+                }
+                , function (jqXHR) {
+                    alert("server comment return error");
+                }
+            );
+        };
+
+        userModule.init().then(function (user) {
+            $('.list_link_to').click(function(){
+                location.href = '/heresy/free/board'
+            });
+            ajaxCall(
+                '/board/getOneArticle'
+                , {data:{articleIdx : articleIdx}}
+                , function (data, jqXHR) {
+
+                    $('.rewrite_link_to').click(linkTo);
+                    $('#articleTitle').text(data.title);
+
+                    $('#articleTime').text(parseDateWithTime(data.createDate));
+
+                    var content = $.parseHTML(data.content);
+                    $('#articleContent').append(content)
+
+                    makeCommentView();
+                }
+                , function (jqXHR) {
+                    alert("server view return error");
+                }
+            );
+
+            $('#commentWriteBtn').click(writeComment);
+            $('#commentContent').keypress(function(e){
+                if(e.which === 13){
+                    writeComment();
+                    return false;
+                }
+            });
+        });
     });
 </script>
 </html>

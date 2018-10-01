@@ -17,8 +17,6 @@ public interface BasicBoardCommentMapper {
 
     List<BasicBoardComment> selectAll(int articleId);
 
-    //BasicBoardComment selectOne(int articleIdx);
-
     int insert(BasicBoardComment basicBoardComment);
 
     int updateSequence(BasicBoardComment basicBoardComment);

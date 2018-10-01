@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.heresy.mapper.AgendaBoardCommentMapper">
+
+    <select id="selectAll" parameterType="Integer" resultType="com.heresy.domain.board.AgendaAndDebateComment" >
+        SELECT * FROM AgendaAndDebateBoardCommet
+          WHERE articleIdx = #{articleIdx}
+            ORDER BY createDate DESC;
+    </select>
+
+    <insert id="insert" parameterType="com.heresy.domain.board.AgendaAndDebateComment">
+        INSERT INTO AgendaAndDebateBoardCommet
+        (
+        articleIdx
+        , userIdx
+        , type
+        , comment
+        , good
+        , bad
+        , createdate
+        , updatedate
+        )
+        VALUES (
+        #{articleIdx}
+        , #{userIdx}
+        , #{type}
+        , #{comment}
+        , #{good}
+        , #{bad}
+        , CURRENT_TIMESTAMP()
+        , CURRENT_TIMESTAMP()
+        )
+    </insert>
+
+    <delete id="delete" parameterType="map">
+        DELETE
+        FROM
+          AgendaAndDebateBoardCommet
+        WHERE idx = #{idx}
+    </delete>
+</mapper>

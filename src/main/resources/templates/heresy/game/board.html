@@ -12,7 +12,7 @@
             </div>
             <div class="col align-self-center">
                 <button type="button" class="btn btn-outline-dark btn-sm float-right" id="boardWriteBtn"
-                        onclick="location.href = '/heresy/politics/write'">글쓰기</button>
+                        onclick="location.href = '/heresy/game/write'">글쓰기</button>
             </div>
         </div>
 
@@ -70,7 +70,7 @@
                 '/board/getAllArticle'
                 , {
                     data : {
-                        pageSize : 10,
+                        pageSize : 20,
                         currentPage : currentPage
                     }
                 }
@@ -95,7 +95,6 @@
                 }
                 , function (jqXHR) {
                     console.log(jqXHR);
-                    alert("server error")
                 }
             );
         };

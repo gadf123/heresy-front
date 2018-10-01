@@ -12,21 +12,6 @@
 
     </select>
 
-    <select id="selectOne" parameterType="Integer" resultType="com.heresy.domain.board.BasicBoardArticle">
-        SELECT
-        articleIdx
-        , bad
-        , content
-        , createDate
-        , subBoardIdx
-        , title
-        , updatedate
-        , userIdx
-        , userNickName
-        FROM BASICBOARDARTICLE
-        WHERE articleIdx = #{articleIdx}
-    </select>
-
     <insert id="insert" parameterType="com.heresy.domain.board.BasicBoardComment">
         INSERT INTO BasicBoardComment
         (
@@ -75,10 +60,7 @@
     <delete id="delete" parameterType="map">
         DELETE
         FROM
-          BASICBOARDARTICLE
+          BasicBoardComment
         WHERE idx = #{idx}
     </delete>
-
-
-
 </mapper>
