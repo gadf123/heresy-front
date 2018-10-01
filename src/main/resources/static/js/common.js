@@ -1,52 +1,16 @@
-var parseTime = function(_millisecondTime){
+var parseDate = function(_millisecondTime){
     var time = new Date(_millisecondTime);
-    var parsedTime = time.toISOString().split('.')[0]
-        .replace(/-/gi,'.')
-        .replace('T',' ');
-    return parsedTime;
+    var datePart = time.toLocaleDateString('ko-KR').replace(/ /gi,'').split('\.');
+    var parsedDate = datePart[0] + (datePart[1] < 10 ? '-0' : '-')
+                     + datePart[1] + '-'
+                     + datePart[2];
+    return parsedDate;
 };
 
-var makePagination = function(pageData, currentPage){
-    var pages = new Array();
-    var url = new URL(window.location.href).pathname;
-
-    if(Number(currentPage) !== 1){
-        var prev= $(document.createElement('li'))
-                .attr('class','page-item prev')
-                .append($(document.createElement('a')).attr(
-                    {
-                        class : "page-link",
-                        href : url +'?page='+(Number(currentPage)-1)
-                    }
-                ).text('이전'));
-        pages.push(prev)
-    }
-
-    for(var i=1; i<= pageData.totalPage; i++){
-        var page= $(document.createElement('li'))
-            .attr('class','page-item')
-            .append($(document.createElement('a')).attr(
-                {
-                    class : "page-link",
-                    href : url +'?page='+i
-                }
-            ).text(i));
-        pages.push(page);
-    }
-
-    if(Number(currentPage) < pageData.totalPage){
-        var next= $(document.createElement('li'))
-            .attr('class','page-item next')
-            .append($(document.createElement('a')).attr(
-                {
-                    class : "page-link",
-                    href : url +'?page='+(Number(currentPage)+1)
-                }
-            ).text('다음'));
-        pages.push(next)
-    }
-
-    return pages;
+var parseDateWithTime = function(_millisecondTime){
+    var time = new Date(_millisecondTime);
+    var parsedDateWithTime = time.toLocaleString('ko-KR');
+    return parsedDateWithTime;
 };
 
 var ajaxCall = function(_url, _option, doneCallBack, failCallBack){
@@ -118,6 +82,7 @@ userModule.prototype.logIn = function(_id, _pwd){
                 .auth()
                 .signInWithEmailAndPassword(_id, _pwd)
                 .then(function (response) {
+                    $('#loginModal').modal('hide');
                     if (!logoutedEl.hasClass('off')) {
                         logoutedEl.addClass('off')
                     }

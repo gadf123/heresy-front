@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row mt-3 ml-1">
             <div class="col">
-                <div class="h2 font-weight-bold">게임</div>
+                <div class="h2 font-weight-bold">정치</div>
             </div>
             <div class="col align-self-center">
                 <button type="button" class="btn btn-outline-dark btn-sm float-right" id="boardWriteBtn"
@@ -67,7 +67,7 @@
 
         var drawTable = function(){
             ajaxCall(
-                '/board/getAllArticle'
+                '/agendaBoard/getAllArticle'
                 , {
                     data : {
                         pageSize : 10,
@@ -89,8 +89,9 @@
                     $('#pagination').append(pagination);
 
                     var linkTo = function(event){
-                        location.href = "/heresy/game/view?id=" + $(this).attr('id');
+                        location.href = "/heresy/politics/view?id=" + $(this).attr('id');
                     };
+
                     $('.list_link_to').click(linkTo)
                 }
                 , function (jqXHR) {

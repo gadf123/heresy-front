@@ -61,7 +61,7 @@
                 .then(function(firebaseIdToken) {
                     console.log(firebaseIdToken)
                     ajaxCall(
-                        '/board/write'
+                        '/agendaBoard/write'
                         ,{
                             method : 'post',
                             data : JSON.stringify(articleData),

@@ -172,7 +172,7 @@
 
                         var meta = $(document.createElement('div')).attr({
                             class : 'meta'
-                        }).text(comment.userIdx + ' | ' + parseTime(comment.createDate));
+                        }).text(comment.userIdx + ' | ' + parseDateWithTime(comment.createDate));
 
                         var reply = $(document.createElement('a')).attr({
                             class : 'reply'
@@ -231,7 +231,7 @@
                     $('.rewrite_link_to').click(linkTo);
                     $('#articleTitle').text(data.title);
 
-                    $('#articleTime').text(parseTime(data.createDate));
+                    $('#articleTime').text(parseDateWithTime(data.createDate));
 
                     var content = $.parseHTML(data.content);
                     $('#articleContent').append(content)

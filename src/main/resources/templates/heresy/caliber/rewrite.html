@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/config :: configFragment">
+</head>
+<body>
+<div th:replace="layout/header :: header"></div>
+<div class="content">
+    <div class="container">
+        <div style="height:700px">
+            <div style="padding-top: 50px; height: 600px;">
+                <div>
+                    <input type="text"
+                           class="form-control"
+                           id="exampleInputEmail1"
+                           aria-describedby="emailHelp" placeholder="제목을 입력하세요">
+                </div>
+                <div style="margin-top: 20px;">
+                    <div id="summernote"></div>
+                </div>
+                <div style="float: right; height: 50px; margin-top: 30px;">
+                    <button type="button" class="btn btn-dark"
+                            onclick="location.href = '/heresy/politics/write'">
+                        작성완료
+                    </button>
+                    <button type="button" class="btn btn-dark"
+                            onclick="location.href = '/heresy/politics/board'">
+                        목록으로
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        $('#summernote').summernote({
+            tabsize: 2,
+            height: 400,
+            maxHeight : 400
+        });
+    });
+</script>
+</html>

@@ -1,3 +1,7 @@
+body{
+    background-color: rgba(0,0,0, 0.03);
+}
+
 #header {
     background-color: #4a4a4a !important;
 }
@@ -26,12 +30,15 @@
 }
 
 .content{
-    width:1600px;
+    width:1130px;
     height:900px;
-    /*background-color: #cbcbcb;*/
+    background-color: white;
     margin : 0 auto;
 }
-
+.content .container{
+    width: 1130px; !important;
+    max-width : 1130px; !important;
+}
 .content .container .main-container{
     padding-top: 30px; !important;
 }
@@ -72,13 +79,16 @@
     float : left;
 }
 
-.form-inline.off{
+.logout-profile.off{
     display : none;
 }
 
 /*
     board table col-width
  */
+.content .container .board{
+    height: 700px;
+}
 
 .table > thead .tcb-board-no {
     width:80px;

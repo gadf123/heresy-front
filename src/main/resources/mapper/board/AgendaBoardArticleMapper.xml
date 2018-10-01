@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.heresy.mapper.AgendaBoardArticleMapper">
+
+    <select id="selectAll" resultType="Map" >
+        SELECT
+            articleIdx
+            , title
+            , userNickName
+            , good
+            , bad
+            , createDate
+        FROM AgendaAndDebateBoardArticle
+    </select>
+
+    <select id="selectWithOffset" parameterType="Map" resultType="Map" >
+        SELECT
+        articleIdx
+        , title
+        , userNickName
+        , good
+        -- , bad
+        , createDate
+        FROM AgendaAndDebateBoardArticle
+        ORDER BY createDate DESC
+        LIMIT #{offSet},#{pageSize}
+    </select>
+    <select id="selectOne"
+            parameterType="Integer"
+            resultType="com.heresy.domain.board.AgendaAndDebateBoardArticle">
+        SELECT
+        articleIdx
+        , bad
+        , content
+        , createDate
+        , subBoardIdx
+        , title
+        , updatedate
+        , userIdx
+        , userNickName
+        FROM AgendaAndDebateBoardArticle
+        WHERE articleIdx = #{articleIdx}
+    </select>
+
+    <insert id="insert"
+            parameterType="com.heresy.domain.board.AgendaAndDebateBoardArticle">
+        INSERT INTO AgendaAndDebateBoardArticle
+            (
+              ARTICLEIDX
+            , bad
+            , content
+            , createdate
+            , good
+            , subboardidx
+            , title
+            , updatedate
+            , useridx
+            , usernickname
+            )
+        VALUES (
+              (select ifnull(max(a.ARTICLEIDX), 0)+1 from AgendaAndDebateBoardArticle a)
+            , #{bad}
+            , #{content}
+            , CURRENT_TIMESTAMP()
+            , #{good}
+            , #{subBoardIdx}
+            , #{title}
+            , CURRENT_TIMESTAMP()
+            , #{userIdx}
+            , #{userNickName}
+            )
+    </insert>
+
+    <update id="update" parameterType="map">
+        UPDATE
+              AgendaAndDebateBoardArticle
+        SET bad = #{bad}
+            , content = #{content}
+            , good = #{good}
+            , subBoardIdx = #{subBoardIdx}
+            , title = #{title}
+            , updateDate = CURRENT_TIMESTAMP()
+            , userNickName = #{userNickName}
+        WHERE idx = #{idx}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE
+        FROM
+          AgendaAndDebateBoardArticle
+        WHERE idx = #{idx}
+    </delete>
+
+
+
+</mapper>
