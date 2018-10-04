@@ -1,3 +1,10 @@
+var makeElement =function(el, attr){
+    if(!attr){
+        attr = {}
+    }
+    return $(document.createElement(el)).attr(attr)
+};
+
 var parseDate = function(_millisecondTime){
     var time = new Date(_millisecondTime);
     var datePart = time.toLocaleDateString('ko-KR').replace(/ /gi,'').split('\.');

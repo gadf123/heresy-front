@@ -42,7 +42,9 @@ public class AgendaBoardCommentService {
         }
 
         filteredResult.put("posiComments", posiComments);
-        filteredResult.put("NegaComments", negaComments);
+        filteredResult.put("posiCommentsSize", posiComments.size());
+        filteredResult.put("negaComments", negaComments);
+        filteredResult.put("negaCommentsSize", negaComments.size());
 
         return filteredResult;
     }

@@ -1,4 +1,19 @@
 /*
+*  게시판 글 데이터 바인딩
+* */
+
+var makeArticleView = function(articleData){
+
+    $('#articleTitle').text(articleData.title);
+
+    $('#articleTime').text(parseDateWithTime(articleData.createDate));
+
+    var content = $.parseHTML(articleData.content);
+    $('#articleContent').append(content);
+}
+
+
+/*
 *   return : 페이지네이션 구조
 * */
 var makePagination = function(pageData, currentPage){
@@ -43,7 +58,7 @@ var makePagination = function(pageData, currentPage){
             .append($(document.createElement('a')).attr(
                 {
                     class : "page-link text-dark",
-                    href : url +'?page='+(Number(currentPage)-1),
+                    href : url +'?page='+(Number(currentPage)+1),
                     'aria-label' : "Next"
                 }
             ).append(arrowSpan.html('&raquo;')).append(labelSpan.text('Next')));

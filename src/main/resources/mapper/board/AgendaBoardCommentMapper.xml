@@ -6,7 +6,17 @@
 <mapper namespace="com.heresy.mapper.AgendaBoardCommentMapper">
 
     <select id="selectAll" parameterType="Integer" resultType="com.heresy.domain.board.AgendaAndDebateComment" >
-        SELECT * FROM AgendaAndDebateBoardCommet
+        SELECT
+        commentIdx
+        , articleIdx
+        , userIdx
+        , type
+        , RTRIM(comment) AS comment
+        , good
+        , bad
+        , createdate
+        , updatedate
+         FROM AgendaAndDebateBoardCommet
           WHERE articleIdx = #{articleIdx}
             ORDER BY createDate DESC;
     </select>

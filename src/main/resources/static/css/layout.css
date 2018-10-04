@@ -247,6 +247,7 @@ body{
 .debate-wrapper .debate-section{
     background-color: rgba(0, 0, 0, 0.03);
     padding : 10px;
+    overflow-y: scroll;
 }
 .debate-wrapper .debate-section:not(:last-child){
     margin-right: 20px;

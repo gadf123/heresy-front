@@ -32,9 +32,7 @@
                                           id="commentContent"
                                           rows="3"
                                           style="resize: none;"
-                                          placeholder="의견을 올려주세요">
-
-                                </textarea>
+                                          placeholder="의견을 올려주세요"></textarea>
                             </div>
                             <div class="card-footer text-muted">
                                 <div style="text-align: right;">
@@ -59,7 +57,7 @@
                     <!--찬성-->
                     <div class="col debate-section">
                         <div id="posi-title">
-                            <span>찬성</span> | 현재 <span></span>개 의견
+                            <span>찬성</span> | 현재 <span id="posiCommentsSize"></span>개 의견
                         </div>
                         <div id="posiContent">
 
@@ -74,8 +72,8 @@
                                         Best
                                     </div>
                                 </div>
-                                <div id="best-content">
-                                    <div class="row debate-content-row">
+                                <div id="bestContent">
+                                    <!--<div class="row debate-content-row">
                                         <div class="col-12">
                                             <div class="row debate-content-title">
                                                 <div class="col-12">
@@ -94,7 +92,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -102,17 +100,15 @@
                             <div id="worst-title">
                                 Worst
                             </div>
-                            <div id="worst-content">
-
-                            </div>
+                            <div id="worstContent"></div>
                         </div>
                     </div>
                     <!--반대-->
                     <div class="col debate-section">
                         <div id="nega-title">
-                            <span>반대</span> | 현재 <span></span>개 의견
+                            <span>반대</span> | 현재 <span id="negaCommentsSize"></span>개 의견
                         </div>
-                        <div id="nega-content">
+                        <div id="negaContent">
 
                         </div>
                     </div>
@@ -131,6 +127,67 @@
 
         var url = new URL(window.location.href);
         var articleIdx = url.searchParams.get("id");
+        var agendaComment = null;
+
+        var makeCommentRow = function (comment) {
+
+            var contentTitle = makeElement('span').text(comment.userIdx);
+            var contentCreateDate = makeElement('span', {id: 'debate-content-title-date'}).text(parseDateWithTime(comment.createDate));
+            var contentTitleCol = makeElement('div', {
+                class: 'col-12'
+            });
+
+            var contentTitleRow = makeElement('div', {
+                class: 'row debate-content-title'
+            });
+
+            var firstRow = contentTitleRow.append(contentTitleCol.append(contentTitle).append(contentCreateDate));
+
+            var contentBodyText = makeElement('div', {
+                class: 'debate-content-body-text'
+            }).append($.parseHTML(comment.comment));
+
+            var contentBodyCol = makeElement('div', {
+                class: 'col-8 col-no-padding-right'
+            });
+
+
+            var contentButtonsLikeImg = makeElement('img', {
+                src: "/img/blankUp.png",
+                alt: "like"
+            });
+
+            var contentButtonsDislikeImg = makeElement('img', {
+                src: "/img/blankDown.png",
+                alt: "dislike"
+            });
+
+            var contentButtonsCol = makeElement('div', {
+                class: 'col-4 debate-content-body-buttons'
+            });
+
+
+            var contentButtonsRow = makeElement('div', {
+                class: 'row debate-content-body',
+            });
+
+            var secondRow = contentButtonsRow
+                .append(contentBodyCol.append(contentBodyText))
+                .append(contentButtonsCol.append(contentButtonsLikeImg).append(contentButtonsDislikeImg));
+
+            var contentCol = makeElement('div', {
+                class: 'col-12'
+            });
+
+            var contentRow = makeElement('div', {
+                class: 'row debate-content-row',
+                id: '',
+                commentIdx : comment.commentIdx
+            });
+
+            var totalCommentContent = contentRow.append(contentCol.append(firstRow).append(secondRow));
+            return totalCommentContent;
+        };
 
         var writeComment = function(){
             var _type = this.id.indexOf('Posi') > 0 ? 'P' : 'N';
@@ -154,26 +211,78 @@
                             idToken : firebaseIdToken
                         }
                         ,function(data,jqXHR){
-
+                            $('#commentContent').val('');
+                            makeCommentView();
                         }
                         ,function(jqXHR){
                             console.log(jqXHR);
-                            alert("server error")
+                            alert("writeComment server error")
                         }
                     )
                 })
                 .catch(function(error) {
                     // Handle error
-                    alert('firebase token getting error')
+                    alert('writeComment firebase token getting error')
                 });
         };
 
+        /*type = {'posi','nega', 'best', 'worst'}*/
+        var makeCommentFromDiff = function(current, currentList, upComingList, type){
+
+            console.log(currentList);
+            console.log(upComingList);
+            console.log('-------diff----------');
+            var addedComments = _.differenceBy(upComingList, currentList, 'commentIdx');
+            var removedComments = _.differenceBy(currentList, upComingList, 'commentIdx');
+
+            var posiComments = addedComments.map(function(comment) {
+                return makeCommentRow(comment);
+            });
+
+            if(current.length === 0){
+                $('#'+type+'Content').append(posiComments);
+            }else{
+                $('#'+type+'Content').prepend(posiComments);
+            }
+
+            current.setCommentList(upComingList, type);
+        };
+
+        var commentObject = function(){
+            this.posiCommentList = [];
+            this.negaCommentList = [];
+            this.bestCommentList = [];
+            this.worstCommentList = [];
+        };
+
+        commentObject.prototype.setCommentList = function(upComing, type){
+            switch(type){
+                case "posi" :
+                    this.posiCommentList = upComing;
+                    break;
+                case "nega" :
+                    this.negaCommentList = upComing;
+                    break;
+                default :
+                    break;
+            }
+        };
 
         var makeCommentView = function(){
             ajaxCall(
                 '/agendaComment/selectAll'
                 , {data:{articleIdx : articleIdx}}
-                , function (data, jqXHR) {
+                , function (upComingData, jqXHR) {
+
+                    $('#posiCommentsSize').text(upComingData.posiCommentsSize);
+                    $('#negaCommentsSize').text(upComingData.negaCommentsSize);
+                    if(!agendaComment){
+                        agendaComment = new commentObject();
+                    }
+                    makeCommentFromDiff(agendaComment, agendaComment.posiCommentList,
+                        upComingData.posiComments, 'posi');
+                    makeCommentFromDiff(agendaComment, agendaComment.negaCommentList,
+                        upComingData.negaComments, 'nega');
 
                 }
                 , function (jqXHR) {
@@ -186,20 +295,18 @@
             $('.list_link_to').click(function(){
                 location.href = '/heresy/caliber/board?page=1'
             });
+
             ajaxCall(
                 '/agendaBoard/getOneArticle'
                 , {data:{articleIdx : articleIdx}}
                 , function (data, jqXHR) {
-
                     $('.rewrite_link_to').click(linkTo);
-                    $('#articleTitle').text(data.title);
 
-                    $('#articleTime').text(parseDateWithTime(data.createDate));
-
-                    var content = $.parseHTML(data.content);
-                    $('#articleContent').append(content);
-
+                    makeArticleView(data);
                     makeCommentView();
+                    setInterval(function(){
+                        makeCommentView();
+                    },10000)
 
                 }
                 , function (jqXHR) {
@@ -207,7 +314,8 @@
                 }
             );
 
-            $('#writePosiBtn, #writeNegaBtn').click(writeComment);
+            //댓글 작성
+           $('#writePosiBtn, #writeNegaBtn').click(writeComment);
         });
     });
 </script>
