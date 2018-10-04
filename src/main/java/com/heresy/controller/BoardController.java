@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,46 @@ public class BoardController {
         basicBoardArticle.setGood(0);
 
         return basicBoardArticleService.insert(basicBoardArticle);
+    }
+
+    @RequestMapping(value = "/reWrite", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    @ResponseBody
+    @AuthCheck
+    public int reWrite(HttpServletResponse response,
+                     @RequestBody BasicBoardArticle basicBoardArticle, User user) {
+        response.setHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        basicBoardArticle.setUserNickName(user.getUserNickName());
+        BasicBoardArticle articleFromServer = basicBoardArticleService.selectOne(basicBoardArticle.getArticleIdx());
+
+        int result = 0;
+
+        if(user.getUseridx() == articleFromServer.getUserIdx()){
+            result = basicBoardArticleService.updateArticle(basicBoardArticle);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*")
+    @ResponseBody
+    @AuthCheck
+    public int delete(HttpServletResponse response,
+                      @RequestBody HashMap body, User user) {
+        response.setHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        int articleIdx = Integer.parseInt(body.get("articleIdx").toString());
+        BasicBoardArticle basicBoardArticle = basicBoardArticleService.selectOne(articleIdx);
+
+        int result = 0;
+
+        if(user.getUseridx() == basicBoardArticle.getUserIdx()){
+            result = basicBoardArticleService.delete(articleIdx);
+        }
+
+        return result;
     }
 
     @RequestMapping("/getAllArticle")

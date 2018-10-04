@@ -57,10 +57,17 @@
           AND sequence > #{sequence}
     </update>
 
-    <delete id="delete" parameterType="map">
+    <delete id="deleteOne" parameterType="Integer">
         DELETE
         FROM
           BasicBoardComment
-        WHERE idx = #{idx}
+        WHERE commentIdx = #{commentIdx}
+    </delete>
+
+    <delete id="deleteAllByArticle" parameterType="Integer">
+        DELETE
+        FROM
+        BasicBoardComment
+        WHERE articleIdx = #{articleIdx}
     </delete>
 </mapper>

@@ -20,28 +20,38 @@ public class BasicBoardArticleService {
     @Autowired
     BasicBoardArticleMapper basicBoardArticleMapper;
 
+    @Autowired
+    BasicBoardCommentService basicBoardCommentService;
+
+    /*In use*/
     public List<HashMap<String, ?>> selectAll() {
         return basicBoardArticleMapper.selectAll();
     }
 
+    /*In use*/
     public List<HashMap<String, ?>> selectWithOffset(HashMap parameters) {
         return basicBoardArticleMapper.selectWithOffset(parameters);
     }
 
+    /*In use*/
     public BasicBoardArticle selectOne(int articleIdx) {
         return basicBoardArticleMapper.selectOne(articleIdx);
     }
 
+    /*In use*/
     public int insert(BasicBoardArticle basicBoardArticle) {
         return basicBoardArticleMapper.insert(basicBoardArticle);
     }
 
-    public int update(BasicBoardArticle basicBoardArticle) {
-        return basicBoardArticleMapper.update(basicBoardArticle);
+    /*In use*/
+    public int updateArticle(BasicBoardArticle basicBoardArticle) {
+        return basicBoardArticleMapper.updateArticle(basicBoardArticle);
     }
 
-    public int delete(int idx) {
-        return basicBoardArticleMapper.delete(idx);
+    /*In use*/
+    public int delete(int articleIdx) {
+        basicBoardCommentService.deleteAllByArticle(articleIdx);
+        return basicBoardArticleMapper.delete(articleIdx);
     }
 
 }

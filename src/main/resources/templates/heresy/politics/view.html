@@ -33,7 +33,7 @@
                     <button class="articleBtn btn btn-dark rewrite_link_to" type="button">
                         수정
                     </button>
-                    <button class="articleBtn btn btn-dark" type="button">
+                    <button class="articleBtn btn btn-dark" id="deleteBtn" type="button">
                         삭제
                     </button>
                     <button class="articleBtn btn btn-dark list_link_to" type="button">
@@ -64,195 +64,45 @@
 </body>
 <script th:inline="javascript">
     $(document).ready(function(){
-        var linkTo = function(event){
-            location.href = "/heresy/politics/rewrite"
-        };
 
-        var url = new URL(window.location.href);
-        var articleIdx = url.searchParams.get("id");
-
-        var writeComment = function(){
-            var commentData = {
-                articleIdx : articleIdx,
-                comment : $('#commentContent').val()
-            };
-            userModule
-                .firebase
-                .auth()
-                .currentUser
-                .getIdToken(true)
-                .then(function(firebaseIdToken) {
-                    console.log(firebaseIdToken)
-                    ajaxCall(
-                        '/basicComment/Write'
-                        ,{
-                            method : 'post',
-                            data : JSON.stringify(commentData),
-                            idToken : firebaseIdToken
-                        }
-                        ,function(data,jqXHR){
-                            makeCommentView();
-                        }
-                        ,function(jqXHR){
-                            console.log(jqXHR);
-                            alert("server error")
-                        }
-                    )
-                })
-                .catch(function(error) {
-                    // Handle error
-                    alert('firebase token getting error')
-                });
-        };
-        var reWriteComment = function(){
-            var recommentData = {
-                articleIdx : articleIdx,
-                comment : $(this).parent().find('input').val(),
-                groupNum : $(this).parent().data('groupNum'),
-                depth: $(this).parent().data('depth')+1,
-                sequence : $(this).parent().data('sequence')
-            };
-
-            userModule
-                .firebase
-                .auth()
-                .currentUser
-                .getIdToken(true)
-                .then(function(firebaseIdToken) {
-                    console.log(firebaseIdToken)
-                    ajaxCall(
-                        '/basicComment/Rewrite'
-                        ,{
-                            method : 'post',
-                            data : JSON.stringify(recommentData),
-                            idToken : firebaseIdToken
-                        }
-                        ,function(data,jqXHR){
-                            makeCommentView();
-                        }
-                        ,function(jqXHR){
-                            console.log(jqXHR);
-                            alert("server error")
-                        }
-                    )
-                })
-                .catch(function(error) {
-                    // Handle error
-                    alert('firebase token getting error')
-                });
-        };
-
-        var makeCommentView = function(){
-            ajaxCall(
-                '/basicComment/selectAll'
-                , {data:{articleIdx : articleIdx}}
-                , function (data, jqXHR) {
-                    var commentsView = $('#commentsView');
-                    if(commentsView.children()){
-                        commentsView.empty();
-                    }
-
-                     data.map(function(comment){
-
-                        var li = $(document.createElement('li')).attr({
-                            'class' : comment.depth === 0? 'comment' : 'comment level-'+(comment.depth+1)
-                        });
-
-                        var photo = $(document.createElement('a')).attr({
-                            href : 'javascript:void(0)',
-                            title : 'profile',
-                            class : 'photo'
-                        });
-
-                        var img = $(document.createElement('img')).attr({
-                            src : 'https://placehold.it/32x32',
-                            alt : comment.userIdx
-                        });
-                        photo.append(img);
-
-                        var meta = $(document.createElement('div')).attr({
-                            class : 'meta'
-                        }).text(comment.userIdx + ' | ' + parseDateWithTime(comment.createDate));
-
-                        var reply = $(document.createElement('a')).attr({
-                            class : 'reply'
-                        }).text('Reply');
-                        //meta.append(reply);
-
-                        var body = $(document.createElement('div')).attr({
-                            class : 'body'
-                        }).text(comment.comment);
-
-                        var reWriteArea = $(document.createElement('div')).attr({
-                            style : 'margin-top: 20px;'
-                        }).data({
-                            'groupNum' : comment.groupNum,
-                            'depth'    : comment.depth,
-                            'sequence' : comment.sequence
-                        });
-
-                        var reWriteInput = $(document.createElement('input')).attr({
-                            type                : 'text' ,
-                            style               : 'width:85%; display: inline-block;',
-                            class               : 'form-control',
-                            id                  : 'recommentContent',
-                            'aria-describedby'  : 'recomment' ,
-                            placeholder         : '대댓글을 입력하세요'
-                        }).keypress(function(e){
-                            if (e.which === 13) {
-                                console.log(this)
-                                reWriteComment.call(this)
-                                return false;    //<---- Add this line
-                            }
-                        });
-
-                         var reWriteButton = $(document.createElement('button')).attr({
-                             class : 'articleBtn btn btn-dark',
-                             type  : 'button'
-                         }).text('작성').click(reWriteComment);
-                         reWriteArea.append(reWriteInput).append(reWriteButton);
-
-                         commentsView.append(li.append(photo).append(meta).append(body).append(reWriteArea));
-                    });
-                }
-                , function (jqXHR) {
-                    alert("server comment return error");
-                }
-            );
-        };
-
-        userModule.init().then(function (user) {
+        var pageView = function(user){
             $('.list_link_to').click(function(){
-                location.href = '/heresy/politics/board'
+                location.href = getMidPath() + 'board?page=1';
             });
-            ajaxCall(
-                '/board/getOneArticle'
-                , {data:{articleIdx : articleIdx}}
-                , function (data, jqXHR) {
 
-                    $('.rewrite_link_to').click(linkTo);
-                    $('#articleTitle').text(data.title);
-
-                    $('#articleTime').text(parseDateWithTime(data.createDate));
-
-                    var content = $.parseHTML(data.content);
-                    $('#articleContent').append(content)
-
-                    makeCommentView();
-                }
-                , function (jqXHR) {
-                    alert("server view return error");
-                }
-            );
-
-            $('#commentWriteBtn').click(writeComment);
-            $('#commentContent').keypress(function(e){
-                if(e.which === 13){
-                    writeComment();
-                    return false;
-                }
+            $('.rewrite_link_to').click(function(event){
+                location.href = getMidPath() + "rewrite?id="+getUrlParameter('id');
             });
-        });
+
+            getOneArticle('/board/getOneArticle','/basicComment/selectAll');
+
+            if(user){
+                $('#deleteBtn').click(function () {
+                    deleteArticle('/board/delete')
+                });
+
+                var commentData = {
+                    articleIdx : getUrlParameter('id')
+                };
+
+                $('#commentWriteBtn').click(function(){
+                    commentData.comment = $('#commentContent').val();
+                    writeComment('/basicComment/Write', commentData, '/basicComment/selectAll');
+
+                });
+
+                $('#commentContent').keypress(function(e){
+                    if(e.which === 13){
+                        commentData.comment = $('#commentContent').val();
+                        writeComment('/basicComment/Write', commentData, '/basicComment/selectAll');
+                        return false;
+                    }
+                });
+            }
+
+        };
+
+        userModule.init(pageView)
     });
 </script>
 </html>

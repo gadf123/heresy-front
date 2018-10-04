@@ -9,6 +9,7 @@
         SELECT
             articleIdx
             , title
+            , userIdx
             , userNickName
             , good
             , bad
@@ -71,24 +72,21 @@
             )
     </insert>
 
-    <update id="update" parameterType="map">
+    <update id="updateArticle" parameterType="map">
         UPDATE
               BASICBOARDARTICLE
-        SET bad = #{bad}
+        SET  title = #{title}
             , content = #{content}
-            , good = #{good}
-            , subBoardIdx = #{subBoardIdx}
-            , title = #{title}
             , updateDate = CURRENT_TIMESTAMP()
             , userNickName = #{userNickName}
-        WHERE idx = #{idx}
+        WHERE articleIdx = #{articleIdx}
     </update>
 
-    <delete id="delete" parameterType="map">
+    <delete id="delete" parameterType="Integer">
         DELETE
         FROM
           BASICBOARDARTICLE
-        WHERE idx = #{idx}
+        WHERE articleIdx = #{articleIdx}
     </delete>
 
 

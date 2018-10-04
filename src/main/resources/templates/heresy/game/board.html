@@ -11,8 +11,9 @@
                 <div class="h2 font-weight-bold">게임</div>
             </div>
             <div class="col align-self-center">
-                <button type="button" class="btn btn-outline-dark btn-sm float-right" id="boardWriteBtn"
-                        onclick="location.href = '/heresy/game/write'">글쓰기</button>
+                <button type="button" class="btn btn-outline-dark btn-sm float-right" id="boardWriteBtn">
+                    글쓰기
+                </button>
             </div>
         </div>
 
@@ -47,62 +48,20 @@
 </div>
 </body>
 <script th:inline="javascript">
-
-
-
-</script>
-<script th:inline="javascript">
     $(document).ready(function(){
-
-        var url = new URL(window.location.href);
-        var currentPage = url.searchParams.get("page");
-
         var pageView = function(user){
+          drawTable('/board/getAllArticle');
           if(user){
               $('#boardWriteBtn').css('display','block');
+              $('#boardWriteBtn').click(function(){
+                  location.href = getMidPath() + 'write';
+              });
           }else{
               $('#boardWriteBtn').css('display','none');
           }
         };
 
-        var drawTable = function(){
-            ajaxCall(
-                '/board/getAllArticle'
-                , {
-                    data : {
-                        pageSize : 20,
-                        currentPage : currentPage
-                    }
-                }
-                , function (data, jqXHR) {
-
-                    if($('#tableContent').children()){
-                        $('#tableContent').empty();
-                    }
-
-                    var rows = makeTableRow(data.contentList);
-                    rows.map(function (row) {
-                        $('#tableContent').append(row);
-                    });
-
-                    var pagination = makePagination(data.pagination, currentPage);
-                    $('#pagination').append(pagination);
-
-                    var linkTo = function(event){
-                        location.href = "/heresy/game/view?id=" + $(this).attr('id');
-                    };
-                    $('.list_link_to').click(linkTo)
-                }
-                , function (jqXHR) {
-                    console.log(jqXHR);
-                }
-            );
-        };
-
-        userModule.init(pageView).then(function(user){
-            console.log(user);
-            drawTable();
-        });
+        userModule.init(pageView);
     });
 </script>
 </html>

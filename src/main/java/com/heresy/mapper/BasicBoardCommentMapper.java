@@ -21,5 +21,7 @@ public interface BasicBoardCommentMapper {
 
     int updateSequence(BasicBoardComment basicBoardComment);
 
-    //int delete(int idx);
+    int deleteOne(int commentIdx);
+
+    int deleteAllByArticle(int articleIdx);
 }

@@ -16,13 +16,13 @@ public interface BasicBoardArticleMapper {
 
     List<HashMap<String,?>> selectAll();
 
+    List<HashMap<String,?>> selectWithOffset(HashMap parameters);
+
     BasicBoardArticle selectOne(int articleIdx);
 
     int insert(BasicBoardArticle basicBoardArticle);
 
-    int update(BasicBoardArticle basicBoardArticle);
+    int updateArticle(BasicBoardArticle basicBoardArticle);
 
-    int delete(int idx);
-
-    List<HashMap<String,?>> selectWithOffset(HashMap parameters);
+    int delete(int articleIdx);
 }

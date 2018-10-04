@@ -84,6 +84,14 @@ body{
 }
 
 /*
+    board write button
+ */
+
+.content .container .board-write-btn{
+    display : none;
+}
+
+/*
     board table col-width
  */
 .content .container .board{

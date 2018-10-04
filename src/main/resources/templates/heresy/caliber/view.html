@@ -229,9 +229,9 @@
         /*type = {'posi','nega', 'best', 'worst'}*/
         var makeCommentFromDiff = function(current, currentList, upComingList, type){
 
-            console.log(currentList);
-            console.log(upComingList);
-            console.log('-------diff----------');
+            //console.log(currentList);
+            //console.log(upComingList);
+            //console.log('-------diff----------');
             var addedComments = _.differenceBy(upComingList, currentList, 'commentIdx');
             var removedComments = _.differenceBy(currentList, upComingList, 'commentIdx');
 

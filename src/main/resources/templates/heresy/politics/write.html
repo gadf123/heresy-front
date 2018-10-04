@@ -21,8 +21,7 @@
                     <button type="button" class="btn btn-dark" id="writeBtn">
                         작성완료
                     </button>
-                    <button type="button" class="btn btn-dark"
-                            onclick="location.href = '/heresy/politics/board?page=1'">
+                    <button type="button" class="btn btn-dark list_link_to">
                         목록으로
                     </button>
                 </div>
@@ -40,47 +39,32 @@
             maxHeight : 400
         });
 
-        $('#writeBtn').click(function(){
-            console.log(userModule)
-            console.log($('#summernote').summernote('code'))
-            if($('#articleTitle').val() === ''){
-                alert("제목은 필수 입니다.")
-                return false;
-            }
+        var pageView = function(user){
+            $('.list_link_to').click(function(){
+                location.href = getMidPath() + 'board?page=1';
+            });
 
-            var articleData = {
-                "title": $('#articleTitle').val(),
-                "content" : $('#summernote').summernote('code'),
-            };
+            if(user){
+                $('#writeBtn').click(function(){
+                    var title = $('#articleTitle');
+                    if(title.val() === ''){
+                        alert("제목은 필수 입니다.")
+                        return false;
+                    }
 
-            userModule
-                .firebase
-                .auth()
-                .currentUser
-                .getIdToken(true)
-                .then(function(firebaseIdToken) {
-                    console.log(firebaseIdToken)
-                    ajaxCall(
-                        '/board/write'
-                        ,{
-                            method : 'post',
-                            data : JSON.stringify(articleData),
-                            idToken : firebaseIdToken
-                        }
-                        ,function(data,jqXHR){
-                            console.log(data)
-                            alert("write done")
-                        }
-                        ,function(jqXHR){
-                            console.log(jqXHR)
-                            alert("server error")
-                        }
-                    )
-                }).catch(function(error) {
-                    // Handle error
-                    alert(0)
+                    var articleData = {
+                        "title": title.val(),
+                        "content" : $('#summernote').summernote('code'),
+                    };
+
+                    writeArticle('/board/write', articleData);
                 });
-        });
+            }else{
+                location.href = getMidPath() + 'board?page=1';
+            }
+        };
+
+        userModule.init(pageView);
     });
 
 

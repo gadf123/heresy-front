@@ -1,3 +1,16 @@
+
+var getMidPath = function(){
+    var url = new URL(location.href);
+    var midPath = url.pathname.substring(0, url.pathname.lastIndexOf('/')+1);
+    return midPath;
+};
+
+var getUrlParameter = function(key){
+    var url = new URL(window.location.href);
+    var value = url.searchParams.get(key);
+    return value;
+};
+
 var makeElement =function(el, attr){
     if(!attr){
         attr = {}

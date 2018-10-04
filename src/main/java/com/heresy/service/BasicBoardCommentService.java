@@ -33,8 +33,12 @@ public class BasicBoardCommentService {
         return basicBoardCommentMapper.updateSequence(basicBoardComment);
     }
 
-    /*public int delete(int idx) {
-        return basicBoardCommentMapper.delete(idx);
-    }*/
+    public int deleteOne(int commentIdx) {
+        return basicBoardCommentMapper.deleteOne(commentIdx);
+    }
+
+    public int deleteAllByArticle(int articleIdx) {
+        return basicBoardCommentMapper.deleteAllByArticle(articleIdx);
+    }
 
 }
