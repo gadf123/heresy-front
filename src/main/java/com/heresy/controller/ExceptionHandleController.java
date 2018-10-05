@@ -2,6 +2,7 @@ package com.heresy.controller;
 
 import com.heresy.ExceptionResponse.ExceptionResponseHandler;
 import com.heresy.exceptions.TokenException;
+import com.heresy.exceptions.UserServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,11 +24,18 @@ public class ExceptionHandleController {
     }
 
     @ExceptionHandler(TokenException.class)
-    public ResponseEntity<ExceptionResponseHandler> TokenExceptionResponse(TokenException tokenException){
+    public ResponseEntity<ExceptionResponseHandler> TokenExceptionResponse(TokenException exception){
         ExceptionResponseHandler exceptionResponseHandler = new ExceptionResponseHandler();
-        exceptionResponseHandler.setMessage1(tokenException.getMessage());
-        exceptionResponseHandler.setMessage2(tokenException.getThisMessage());
+        exceptionResponseHandler.setMainMessage(exception.getMainMessage());
+        exceptionResponseHandler.setSubMessage(exception.getSubMessage());
         return new ResponseEntity(exceptionResponseHandler, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(UserServiceException.class)
+    public ResponseEntity<ExceptionResponseHandler> UserBindingExceptionResponse(UserServiceException exception){
+        ExceptionResponseHandler exceptionResponseHandler = new ExceptionResponseHandler();
+        exceptionResponseHandler.setMainMessage(exception.getMainMessage());
+        exceptionResponseHandler.setSubMessage(exception.getSubMessage());
+        return new ResponseEntity(exceptionResponseHandler, HttpStatus.BAD_REQUEST);
+    }
 }

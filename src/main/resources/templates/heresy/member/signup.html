@@ -6,23 +6,40 @@
         <div th:replace="layout/header :: header"></div>
         <div class="container mt-4">
             <p class="h2 mb-4">회원가입</p>
-            <form class="w-75 mx-auto">
+            <form class="w-75 mx-auto" id="userForm" method="post" action="">
                 <div class="form-group">
                     <label for="inputEmail">ID(E-Mail)</label>
-                    <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter your e-mail">
+                    <input type="email"
+                           class="form-control"
+                           id="inputEmail"
+                           name="inputEmail"
+                           aria-describedby="emailHelp"
+                           placeholder="Enter your e-mail">
                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <div class="form-group">
-                    <label for="inputNickname">Nickname</label>
-                    <input type="nickname" class="form-control" id="inputNickname" placeholder="Enter nickname">
+                    <label for="inputNickName">Nickname</label>
+                    <input type="text"
+                           class="form-control"
+                           id="inputNickName"
+                           name="inputNickName"
+                           placeholder="Enter nickname">
                 </div>
                 <div class="form-group">
                     <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-                    <input type="password" class="form-control mt-1" id="inputPasswordVerification" placeholder="Re-Enter Password">
+                    <input type="password"
+                           class="form-control"
+                           id="inputPassword"
+                           name="inputPassword"
+                           placeholder="Password">
+                    <input type="password"
+                           class="form-control mt-1"
+                           id="inputPasswordVerification"
+                           name="inputPasswordVerification"
+                           placeholder="Re-Enter Password">
                 </div>
                 <div class="float-right">
-                    <button type="submit" class="btn btn-primary">SignUp</button>
+                    <button type="button" class="btn btn-primary" id="signUpSubmit">SignUp</button>
                     <button type="button" class="btn btn-light">Cancel</button>
                 </div>
             </form>
@@ -30,16 +47,97 @@
     </body>
     <script th:inline="javascript">
         $(document).ready(function(){
-            $('#signUpSubmit').click(function(){
-                //if(confirm("회원가입을 완료하시겠습니까?")){
-                var UserData = {
-                    "userId": $('#inputEmail').val(),
-                    "userNickName": $('#inputNickName').val(),
-                    "password": $('#inputPassword').val()
-                };
-                userModule.signUp(UserData);
-                //}
+            userModule.init(function(user){
+                if(user){
+                    location.href = getHomePath();
+                }else{
+                    var userForm = $('#userForm');
+                    $.extend($.validator.messages, {required: "필수 항목입니다."});
+                    userForm.validate({
+                        debug: true,
+                        onfocusout : function(element){
+                            this.element(element);
+                        },
+                        rules : {
+                            inputEmail : {
+                                required : true,
+                                email : true,
+                                remote: {
+                                    url: "/user/checkUserByUserId",
+                                    type: "get",
+                                    data: {
+                                        userId: function() {
+                                            return $("#inputEmail").val();
+                                        }
+                                    }
+                                }
+                            },
+                            inputNickName : {
+                                required : true,
+                                rangelength : [1,6],
+                                remote: {
+                                    url: "/user/checkUserByUserNickName",
+                                    type: "get",
+                                    data: {
+                                        userNickName: function() {
+                                            return $("#inputNickName").val();
+                                        }
+                                    }
+                                }
+                            },
+                            inputPassword : {
+                                required : true,
+                                minlength : 6
+                            },
+                            inputPasswordVerification : {
+                                required : true,
+                                minlength : 6,
+                                equalTo : "#inputPassword"
+                            }
+                        },
+                        messages : {
+                            inputEmail : {
+                                email: "올바른 형식을 넣어주세요",
+                                remote: "이메일이 이미 사용 중입니다"//jQuery.validator.format("{0} : 이미 사용 중입니다")
+                            },
+                            inputNickName : {
+                                rangelength: "최소 1글자 이상 최대 6글자 이하입니다.",
+                                remote: "닉네임이 이미 사용 중입니다"//jQuery.validator.format("{0} : 이미 사용 중입니다")
+                            },
+                            inputPassword : {
+                                minlength : "최소 6자리 이상입력해주세요."
+                            },
+                            inputPasswordVerification : {
+                                minlength : "최소 6자리 이상입력해주세요.",
+                                equalTo : "비밀번호가 일치하지 않습니다."
+                            }
+                        }
+                        /*submitHandler: function(form) {
+                            console.log(form)
+                            var UserData = {
+                                "userId": $('#inputEmail').val(),
+                                "userNickName": $('#inputNickName').val(),
+                                "password": $('#inputPassword').val()
+                            };
+                            userModule.signUp(UserData);
+                        }*/
+                    });
+
+                    $('#signUpSubmit').click(function(){
+                        //if(confirm("회원가입을 완료하시겠습니까?")){
+                        if(userForm.valid()){
+                            var UserData = {
+                                "userId": $('#inputEmail').val(),
+                                "userNickName": $('#inputNickName').val(),
+                                "password": $('#inputPassword').val()
+                            };
+                            userModule.signUp(UserData);
+                        }
+                        //}
+                    })
+                }
             })
+
         })
     </script>
 </html>

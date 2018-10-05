@@ -5,24 +5,46 @@
 
 <mapper namespace="com.heresy.mapper.UserMapper">
 
-    <select id="selectOne" parameterType="String" resultType="com.heresy.domain.user.User">
+    <select id="selectOneByUserId" parameterType="String" resultType="com.heresy.domain.user.User">
         SELECT
-           *
+            userIdx,
+            userId,
+            userNickName,
+            experience,
+            tendency,
+            introduction,
+            authSnsId,
+            createDate
         FROM USER
         WHERE userId = #{userId}
     </select>
 
+    <select id="selectOneByNickName" parameterType="String" resultType="com.heresy.domain.user.User">
+        SELECT
+            userIdx,
+            userId,
+            userNickName,
+            experience,
+            tendency,
+            introduction,
+            authSnsId,
+            createDate
+        FROM USER
+        WHERE userNickName = #{userNickName}
+    </select>
+
+
     <insert id="insert" parameterType="com.heresy.domain.user.User">
         INSERT INTO USER
             (
-            useridx,
+            userIdx,
             userId,
-            usernickname,
+            userNickName,
             password,
             experience,
             tendency,
             introduction,
-            authsnsid,
+            authSnsId,
             createDate,
             updateDate
             )
@@ -51,13 +73,13 @@
             , updateDate = CURRENT_TIMESTAMP()
             , userNickName = #{userNickName}
         WHERE idx = #{idx}
-    </update>
+    </update> -->
 
-    <delete id="delete" parameterType="map">
+    <delete id="delete" parameterType="Integer">
         DELETE
         FROM
-          BASICBOARDARTICLE
-        WHERE idx = #{idx}
-    </delete>-->
+          USER
+        WHERE userIdx = #{userIdx}
+    </delete>
 
 </mapper>

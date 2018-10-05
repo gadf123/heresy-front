@@ -44,7 +44,7 @@ public class AgendaBoardCommentController {
                             @RequestBody AgendaAndDebateComment agendaAndDebateComment, User user){
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        agendaAndDebateComment.setUserIdx(user.getUseridx());
+        agendaAndDebateComment.setUserIdx(user.getUserIdx());
         int result = agendaBoardCommentService.insert(agendaAndDebateComment);
         return result;
     }

@@ -21,8 +21,12 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
-    public User selectOne(String userId) {
-        return userMapper.selectOne(userId);
+    public User selectOneByUserId(String userId) {
+        return userMapper.selectOneByUserId(userId);
+    }
+
+    public User selectOneByNickName(String userNickname) {
+        return userMapper.selectOneByNickName(userNickname);
     }
 
     public int insert(User user) {
@@ -33,8 +37,8 @@ public class UserService {
         return userMapper.update(user);
     }
 
-    public int delete(int idx) {
-        return userMapper.delete(idx);
+    public int delete(int userIdx) {
+        return userMapper.delete(userIdx);
     }
 
 

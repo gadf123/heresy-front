@@ -34,7 +34,7 @@ public class AgendaBoardController {
                      @RequestBody AgendaAndDebateBoardArticle agendaAndDebateBoardArticle, User user) {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        agendaAndDebateBoardArticle.setUserIdx(user.getUseridx());
+        agendaAndDebateBoardArticle.setUserIdx(user.getUserIdx());
         agendaAndDebateBoardArticle.setUserNickName(user.getUserNickName());
         agendaAndDebateBoardArticle.setSubBoardIdx(0);
         agendaAndDebateBoardArticle.setGood(0);

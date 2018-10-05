@@ -35,7 +35,7 @@ public class BoardController {
                               @RequestBody BasicBoardArticle basicBoardArticle, User user) {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        basicBoardArticle.setUserIdx(user.getUseridx());
+        basicBoardArticle.setUserIdx(user.getUserIdx());
         basicBoardArticle.setUserNickName(user.getUserNickName());
         basicBoardArticle.setSubBoardIdx(0);
         basicBoardArticle.setGood(0);
@@ -56,7 +56,7 @@ public class BoardController {
 
         int result = 0;
 
-        if(user.getUseridx() == articleFromServer.getUserIdx()){
+        if(user.getUserIdx() == articleFromServer.getUserIdx()){
             result = basicBoardArticleService.updateArticle(basicBoardArticle);
         }
 
@@ -76,7 +76,7 @@ public class BoardController {
 
         int result = 0;
 
-        if(user.getUseridx() == basicBoardArticle.getUserIdx()){
+        if(user.getUserIdx() == basicBoardArticle.getUserIdx()){
             result = basicBoardArticleService.delete(articleIdx);
         }
 

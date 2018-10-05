@@ -37,7 +37,7 @@ public class AuthAspect {
             FirebaseToken decodeToken = FirebaseAuth.getInstance().verifyIdTokenAsync(idToken).get();
             for(int i = 0; i < joinPoint.getArgs().length; i++){
                 if(joinPoint.getArgs()[i].equals(user)){
-                    joinPoint.getArgs()[i] = userService.selectOne(decodeToken.getEmail());
+                    joinPoint.getArgs()[i] = userService.selectOneByUserId(decodeToken.getEmail());
                 }
             }
             return joinPoint.proceed(joinPoint.getArgs());

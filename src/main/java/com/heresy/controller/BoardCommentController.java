@@ -43,7 +43,7 @@ public class BoardCommentController {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Origin", "*");
         basicBoardComment.setSequence(1);
-        basicBoardComment.setUserIdx(user.getUseridx());
+        basicBoardComment.setUserIdx(user.getUserIdx());
         int result = basicBoardCommentService.insert(basicBoardComment);
         return result;
     }
@@ -56,7 +56,7 @@ public class BoardCommentController {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Origin", "*");
 
-        basicBoardComment.setUserIdx(user.getUseridx());
+        basicBoardComment.setUserIdx(user.getUserIdx());
         int updateResult = basicBoardCommentService.updateSequence(basicBoardComment);
         System.out.println(updateResult);
         basicBoardComment.setSequence(basicBoardComment.getSequence()+1);

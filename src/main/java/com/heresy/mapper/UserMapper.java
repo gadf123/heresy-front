@@ -12,12 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserMapper {
 
-    User selectOne(String userId);
+    User selectOneByUserId(String userId);
+
+    User selectOneByNickName(String userNickname);
 
     int insert(User user);
 
     int update(User user);
 
-    int delete(int idx);
-
+    int delete(int userIdx);
 }

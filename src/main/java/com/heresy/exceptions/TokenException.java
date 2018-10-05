@@ -1,29 +1,31 @@
 package com.heresy.exceptions;
 
 public class TokenException extends RuntimeException{
-    private String thisMessage;
-    private String message;
+    private String mainMessage;
+    private String subMessage;
 
-    public TokenException(String message, String thisMessage){
-        super(message);
-        this.thisMessage = thisMessage;
+    public TokenException(String mainMessage, String subMessage){
+        super(mainMessage);
+        this.mainMessage = mainMessage;
+        this.subMessage = subMessage;
+        super.printStackTrace();
+    }
+
+    public String getMainMessage() {
+        return mainMessage;
+    }
+
+    /*public void setMessage(String message) {
         this.message = message;
+    }*/
+
+    public String getSubMessage() {
+        return subMessage;
     }
 
-    public String getThisMessage() {
-        return thisMessage;
-    }
-
-    public void setThisMessage(String thisMessage) {
+    /*public void setThisMessage(String thisMessage) {
         this.thisMessage = thisMessage;
-    }
+    }*/
 
-    @Override
-    public String getMessage() {
-        return message;
-    }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

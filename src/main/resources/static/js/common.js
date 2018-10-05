@@ -1,3 +1,6 @@
+var getHomePath = function () {
+    return '/heresy/home';
+};
 
 var getMidPath = function(){
     var url = new URL(location.href);
@@ -22,8 +25,8 @@ var parseDate = function(_millisecondTime){
     var time = new Date(_millisecondTime);
     var datePart = time.toLocaleDateString('ko-KR').replace(/ /gi,'').split('\.');
     var parsedDate = datePart[0] + (datePart[1] < 10 ? '-0' : '-')
-                     + datePart[1] + (datePart[2] < 10 ? '-0' : '-')
-                     + datePart[2];
+        + datePart[1] + (datePart[2] < 10 ? '-0' : '-')
+        + datePart[2];
     return parsedDate;
 };
 
@@ -34,23 +37,23 @@ var parseDateWithTime = function(_millisecondTime){
 };
 
 var ajaxCall = function(_url, _option, doneCallBack, failCallBack){
-   $.ajax({
-       url : _url,
-       method : _option.method ? _option.method : 'get',
-       data : _option.data? _option.data : {},
-       contentType: _option.contentType ? _option.contentType : "application/json",
-       beforeSend : function(jqXHR, settings){
-           jqXHR.setRequestHeader('idToken', _option.idToken);
-           console.log(jqXHR, settings)
-       }
-   }).done(function(data, textStatus, jqXHR) {
+    $.ajax({
+        url : _url,
+        method : _option.method ? _option.method : 'get',
+        data : _option.data? _option.data : {},
+        contentType: _option.contentType ? _option.contentType : "application/json",
+        beforeSend : function(jqXHR, settings){
+            jqXHR.setRequestHeader('idToken', _option.idToken);
+            console.log(jqXHR, settings)
+        }
+    }).done(function(data, textStatus, jqXHR) {
         if(jqXHR.status === 200 && jqXHR.statusText === "success"){
             doneCallBack(data, jqXHR)
         }
-   }).fail(function(jqXHR, textStatus, errorThrown) {
-       failCallBack(jqXHR);
-   }).always(function() {
-   });
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        failCallBack(jqXHR);
+    }).always(function() {
+    });
 };
 
 var userModule = function () {
@@ -68,30 +71,30 @@ var userModule = function () {
 userModule.prototype.init = function(pageView){
     return new Promise(function(resolve, reject){
         this.firebase.auth().onAuthStateChanged(function(user) {
-        var loginedEl = $('.login-profile');
-        var logoutedEl = $('.logout-profile'); //
-        if (user) {
-            if(loginedEl.hasClass('off')){
-                loginedEl.removeClass('off');
-            }
+            var loginedEl = $('.login-profile');
+            var logoutedEl = $('.logout-profile'); //
+            if (user) {
+                if(loginedEl.hasClass('off')){
+                    loginedEl.removeClass('off');
+                }
 
-            if(!logoutedEl.hasClass('off')){
-                logoutedEl.addClass('off')
+                if(!logoutedEl.hasClass('off')){
+                    logoutedEl.addClass('off')
+                }
+                $('#login-id').text(user.displayName);
+                resolve(user);
+            } else {
+                // User is signed out.
+                if(logoutedEl.hasClass('off')){
+                    logoutedEl.removeClass('off')
+                }
+                if(!loginedEl.hasClass('off')){
+                    loginedEl.addClass('off')
+                }
+                resolve("no user logined")
             }
-            $('#login-id').text(user.displayName);
-            resolve(user);
-        } else {
-            // User is signed out.
-            if(logoutedEl.hasClass('off')){
-                logoutedEl.removeClass('off')
-            }
-            if(!loginedEl.hasClass('off')){
-                loginedEl.addClass('off')
-            }
-            resolve("no user logined")
-        }
-        pageView(user);
-    })});
+            pageView(user);
+        })});
 };
 userModule.prototype.logIn = function(_id, _pwd){
     var _this = this;
@@ -125,7 +128,7 @@ userModule.prototype.logOut = function(){
         .auth()
         .signOut()
         .then(function () {
-            alert("firebase 로그아웃 완료");
+            alert("로그아웃 되었습니다");
             if(!loginedEl.hasClass('off')){
                 loginedEl.addClass('off')
             }
@@ -143,9 +146,9 @@ userModule.prototype.signUp = function (_userData) {
             data : JSON.stringify(_userData)
         },
         function(data,jqXHR){
-            alert("server save done")
-            console.log(this)
-            this.firebase
+            alert("회원가입 완료되었습니다");
+            //location.href = getHomePath();
+            /*this.firebase
                 .auth()
                 .createUserWithEmailAndPassword(_userData.userId, _userData.password)
                 .then(function (res) {
@@ -165,11 +168,11 @@ userModule.prototype.signUp = function (_userData) {
                     }
 
                     console.log(error)
-                });
+                });*/
 
         },
         function(jqXHR){
-            alert("server save fail")
+            alert("회원가입 에러")
             console.log(jqXHR)
         })
 };

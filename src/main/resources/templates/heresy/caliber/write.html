@@ -40,8 +40,6 @@
         });
 
         $('#writeBtn').click(function(){
-            console.log(userModule)
-            console.log($('#summernote').summernote('code'))
             if($('#articleTitle').val() === ''){
                 alert("제목은 필수 입니다.")
                 return false;
@@ -52,33 +50,7 @@
                 "content" : $('#summernote').summernote('code'),
             };
 
-            userModule
-                .firebase
-                .auth()
-                .currentUser
-                .getIdToken(true)
-                .then(function(firebaseIdToken) {
-                    console.log(firebaseIdToken)
-                    ajaxCall(
-                        '/agendaBoard/write'
-                        ,{
-                            method : 'post',
-                            data : JSON.stringify(articleData),
-                            idToken : firebaseIdToken
-                        }
-                        ,function(data,jqXHR){
-                            console.log(data)
-                            alert("write done")
-                        }
-                        ,function(jqXHR){
-                            console.log(jqXHR)
-                            alert("server error")
-                        }
-                    )
-                }).catch(function(error) {
-                    // Handle error
-                    alert(0)
-                });
+            writeArticle('/agendaBoard/write', articleData);
         });
     });
 
