@@ -3,14 +3,14 @@ package com.heresy.controller;
 import com.heresy.annotations.AuthCheck;
 import com.heresy.domain.board.BasicBoardArticle;
 import com.heresy.domain.user.User;
-import com.heresy.service.AgendaBoardArticleService;
 import com.heresy.service.BasicBoardArticleService;
+import com.heresy.utills.FileUploader;
 import com.heresy.utills.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
@@ -27,14 +27,16 @@ public class BoardController {
     @Autowired
     BasicBoardArticleService basicBoardArticleService;
 
+    @Autowired
+    FileUploader fileUploader;
+    
     @RequestMapping(value = "/write", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
     @ResponseBody
     @AuthCheck
     public int write(HttpServletResponse response,
                               @RequestBody BasicBoardArticle basicBoardArticle, User user) {
-        response.setHeader("Access-Control-Allow-Methods", "*");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+
         basicBoardArticle.setUserIdx(user.getUserIdx());
         basicBoardArticle.setUserNickName(user.getUserNickName());
         basicBoardArticle.setSubBoardIdx(0);
@@ -43,14 +45,25 @@ public class BoardController {
         return basicBoardArticleService.insert(basicBoardArticle);
     }
 
+    @RequestMapping(value = "/addImage", method = RequestMethod.POST)
+    @CrossOrigin(origins = "*")
+    @ResponseBody
+    @AuthCheck
+    public String addImage(HttpServletResponse response,
+                           @RequestParam("image") MultipartFile image, User user){
+        System.out.println("------------------");
+        String fileName = fileUploader.uploadSingleFile(image);
+        System.out.println("------------------");
+        return fileName;
+    }
+
     @RequestMapping(value = "/reWrite", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
     @ResponseBody
     @AuthCheck
     public int reWrite(HttpServletResponse response,
                      @RequestBody BasicBoardArticle basicBoardArticle, User user) {
-        response.setHeader("Access-Control-Allow-Methods", "*");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+
         basicBoardArticle.setUserNickName(user.getUserNickName());
         BasicBoardArticle articleFromServer = basicBoardArticleService.selectOne(basicBoardArticle.getArticleIdx());
 
@@ -69,8 +82,7 @@ public class BoardController {
     @AuthCheck
     public int delete(HttpServletResponse response,
                       @RequestBody HashMap body, User user) {
-        response.setHeader("Access-Control-Allow-Methods", "*");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+
         int articleIdx = Integer.parseInt(body.get("articleIdx").toString());
         BasicBoardArticle basicBoardArticle = basicBoardArticleService.selectOne(articleIdx);
 
@@ -89,8 +101,6 @@ public class BoardController {
     public HashMap<String, Object> getAllArticle(HttpServletResponse response,
                                                   @RequestParam(value = "pageSize") int pageSize,
                                                   @RequestParam(value = "currentPage") int currentPage){
-        response.setHeader("Access-Control-Allow-Methods", "*");
-        response.setHeader("Access-Control-Allow-Origin", "*");
 
         int totalSize = basicBoardArticleService.selectAll().size();
         Pagination pagination = new Pagination(pageSize, totalSize, currentPage);
@@ -114,4 +124,6 @@ public class BoardController {
                                            @RequestParam("articleIdx") int articleIdx){
         return basicBoardArticleService.selectOne(articleIdx);
     }
+
+
 }

@@ -40,7 +40,7 @@
                 </div>
                 <div class="float-right">
                     <button type="button" class="btn btn-primary" id="signUpSubmit">SignUp</button>
-                    <button type="button" class="btn btn-light">Cancel</button>
+                    <button type="button" class="btn btn-light" id="signUpCancel">Cancel</button>
                 </div>
             </form>
         </div>
@@ -51,6 +51,10 @@
                 if(user){
                     location.href = getHomePath();
                 }else{
+                    $('#signUpCancel').click(function () {
+                        location.href = getHomePath();
+                    });
+
                     var userForm = $('#userForm');
                     $.extend($.validator.messages, {required: "필수 항목입니다."});
                     userForm.validate({
@@ -112,15 +116,6 @@
                                 equalTo : "비밀번호가 일치하지 않습니다."
                             }
                         }
-                        /*submitHandler: function(form) {
-                            console.log(form)
-                            var UserData = {
-                                "userId": $('#inputEmail').val(),
-                                "userNickName": $('#inputNickName').val(),
-                                "password": $('#inputPassword').val()
-                            };
-                            userModule.signUp(UserData);
-                        }*/
                     });
 
                     $('#signUpSubmit').click(function(){

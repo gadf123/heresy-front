@@ -126,9 +126,24 @@
             </div>
 
             <div class="float-right mt-3">
-                <button type="button" class="btn btn-primary">동의</button>
-                <button type="button" class="btn btn-light">취소</button>
+                <button type="button" class="btn btn-primary" id="legalAccept">동의</button>
+                <button type="button" class="btn btn-light" id="legalDeny">취소</button>
             </div>
         </div>
     </body>
+    <script th:inline="javascript">
+        userModule.init(function(user){
+            if(user){
+                location.href = getHomePath();
+            }else{
+                $('#legalAccept').click(function (){
+                    location.href = getMidPath() + 'signup';
+                });
+
+                $('#legalDeny').click(function (){
+                    location.href = getHomePath();
+                });
+            }
+        })
+    </script>
 </html>

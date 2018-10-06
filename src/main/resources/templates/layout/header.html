@@ -40,13 +40,13 @@
                                     data-target="#loginModal">
                                 로그인
                             </button>
-                            <a class="btn btn-outline-light" role="button" href="/heresy/member/signup">
+                            <a class="btn btn-outline-light" role="button" href="/heresy/member/legalpolicy">
                                 회원가입
                             </a>
                         </div>
 
                         <div class="login-profile off">
-                            <img th:src="@{/img/avatar.png}" alt="Avatar" class="login-avatar">
+                            <img th:src="@{/img/avatar.png}" alt="Avatar" class="login-avatar" id="avatar">
                             <div class="login-name">
                                 <span id="login-id"></span>
                             </div>
@@ -57,7 +57,7 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalCenterTitle">
+                                        <h5 class="modal-title" id="loginModalCenterTitle">
                                             Sign-In
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -96,7 +96,20 @@
             </div>
             <script th:inline="javascript">
                 $(document).ready(function(){
-                    console.log($)
+                    console.log('header', $);
+                    $('#loginBtn').click(function(){
+                        var id = $('#loginId').val();
+                        var pwd = $('#loginPwd').val();
+                        userModule.logIn(id,pwd)
+                    });
+
+                    $('#logoutBtn').click(function(){
+                        userModule.logOut()
+                    });
+
+                    $('#avatar').click(function () {
+                        location.href = '/heresy/member/verification';
+                    });
                 })
             </script>
         </div>

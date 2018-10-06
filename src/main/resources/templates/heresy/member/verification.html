@@ -13,7 +13,7 @@
     </div>
     <div class="row justify-content-start">
         <div class="col-10" style="margin-top:10px">
-            회원님의 개인정보 보호를 위해 비밀번호를 다시 입력해줏세용.
+            회원님의 개인정보 보호를 위해 비밀번호를 다시 입력해주세요.
         </div>
     </div>
     <div class="row justify-content-center">
@@ -21,18 +21,73 @@
             <tbody>
             <tr>
                 <td style="width:120px">비밀번호확인</td>
-                <td style="width:300px"><input style="width:100%" class="password" /></td>
+                <td style="width:300px">
+                    <form id="verificationForm">
+                        <input type = "password"
+                               style="width:100%"
+                               class="password"
+                               name="inputPassword"
+                               id="inputPassword"/>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
     <div class="row justify-content-center">
-        <button>확인</button>
+        <button type="button" class="btn btn-primary" id="verificationSubmit">확인</button>
+        <button type="button" class="btn btn-light" id="verificationCancel">취소</button>
     </div>
     </div>
 </div>
 </body>
 <script th:inline="javascript">
-</script>
+    $(document).ready(function(){
+        userModule.init(function(user){
+            var verificationForm = $('#verificationForm');
+            verificationForm.validate({
+                debug: true,
+                onfocusout : function(element){
+                    this.element(element);
+                },
+                rules : {
+                    inputPassword : {
+                        required : true,
+                        minlength : 6
+                    }
+                },
+                messages : {
+                    inputPassword : {
+                        minlength : "최소 6자리 이상입력해주세요."
+                    }
+                }
+            });
+            if(user){
+                $('#verificationSubmit').click(function () {
+                    if(verificationForm.valid()){
+                        var userData = {
+                            "password": $('#inputPassword').val()
+                        };
 
+                        userModule.verifyPassword(userData)
+                            .then(function(isMatch){
+                                if(isMatch){
+                                    alert("인증이 완료되었습니다.");
+                                    location.href = getMidPath() + 'myinfo';
+                                }else{
+                                    alert("비밀번호가 일치하지 않습니다.");
+                                }
+                            });
+                    }
+                });
+
+                $('#verificationCancel').click(function () {
+                    location.href = getHomePath();
+                });
+            }else{
+                location.href = getHomePath();
+            }
+        })
+    })
+</script>
 </html>

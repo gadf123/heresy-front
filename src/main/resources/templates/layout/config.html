@@ -22,15 +22,7 @@
     <script th:src="@{/js/boardCommon.js}"></script>
     <script th:inline="javascript">
         $(document).ready(function(){
-            $('#loginBtn').click(function(){
-                var id = $('#loginId').val();
-                var pwd = $('#loginPwd').val();
-                userModule.logIn(id,pwd)
-            });
-
-            $('#logoutBtn').click(function(){
-                userModule.logOut()
-            });
+            $.extend($.validator.messages, {required: "필수 항목입니다."});
         })
     </script>
 </head>

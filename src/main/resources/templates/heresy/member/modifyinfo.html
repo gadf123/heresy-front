@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout/config :: configFragment">
+    </head>
+    <body>
+        <div th:replace="layout/header :: header"></div>
+        <div class="container mt-4">
+            <p class="h2 mb-4">회원 수정</p>
+            <div class="w-75 mx-auto">
+                <div class="form-group">
+                    <p class="h3 mb-4">ID(E-Mail)</p>
+                    <p class="h4 mb-4" id="userEmail">&nbsp;</p>
+                </div>
+            </div>
+            <form class="w-75 mx-auto" id="nickNameForm" method="post" action="">
+                <p class="h3 mb-4">닉네임 수정</p>
+                <div class="form-group">
+                    <input type="text"
+                           class="form-control"
+                           id="inputNickName"
+                           name="inputNickName"
+                           placeholder="Enter nickname">
+                </div>
+                <div class="float-right">
+                    <button type="button" class="btn btn-primary" id="nickNameSubmit">수정</button>
+                </div>
+            </form>
+            <form class="w-75 mx-auto" id="passwordForm" method="post" action="" style="clear:both;">
+                <div class="form-group">
+                    <p class="h3 mb-4">비밀번호 수정</p>
+                    <input type="password"
+                           class="form-control"
+                           id="inputPassword"
+                           name="inputPassword"
+                           placeholder="Password">
+                    <input type="password"
+                           class="form-control mt-1"
+                           id="inputPasswordVerification"
+                           name="inputPasswordVerification"
+                           placeholder="Re-Enter Password">
+                </div>
+                <div class="float-right">
+                    <button type="button" class="btn btn-primary" id="passwordSubmit">수정</button>
+                    <button type="button" class="btn btn-light" id="modifyCancel">취소</button>
+                </div>
+            </form>
+        </div>
+    </body>
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            userModule.init(function(user){
+                if(user){
+                    $('#modifyCancel').click(function () {
+                        location.href = getHomePath();
+                    });
+
+                    userModule.getUserProfile("/user/getUserProfile").then(function (userData) {
+                        $('#userEmail').text(userData.userId);
+                        var nickNameForm = $('#nickNameForm');
+                        nickNameForm.validate({
+                            debug: true,
+                            onfocusout : function(element){
+                                this.element(element);
+                            },
+                            rules : {
+                                inputNickName : {
+                                    required : true,
+                                    rangelength : [1,6],
+                                    remote: {
+                                        url: "/user/checkUserByUserNickName",
+                                        type: "get",
+                                        data: {
+                                            userNickName: function() {
+                                                return $("#inputNickName").val();
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            messages : {
+                                inputNickName : {
+                                    rangelength: "최소 1글자 이상 최대 6글자 이하입니다.",
+                                    remote: "닉네임이 이미 사용 중입니다"//jQuery.validator.format("{0} : 이미 사용 중입니다")
+                                }
+                            }
+                        });
+
+                        var passwordForm = $('#passwordForm');
+                        passwordForm.validate({
+                            debug: true,
+                            onfocusout : function(element){
+                                this.element(element);
+                            },
+                            rules : {
+                                inputPassword : {
+                                    required : true,
+                                    minlength : 6
+                                },
+                                inputPasswordVerification : {
+                                    required : true,
+                                    minlength : 6,
+                                    equalTo : "#inputPassword"
+                                }
+                            },
+                            messages : {
+                                inputPassword : {
+                                    minlength : "최소 6자리 이상입력해주세요."
+                                },
+                                inputPasswordVerification : {
+                                    minlength : "최소 6자리 이상입력해주세요.",
+                                    equalTo : "비밀번호가 일치하지 않습니다."
+                                }
+                            }
+                        });
+
+                        $('#nickNameSubmit').click(function(){
+                            //if(confirm("회원가입을 완료하시겠습니까?")){
+                            if(nickNameForm.valid()){
+                                var userData = {
+                                    "userId": user.email,
+                                    "userNickName": $('#inputNickName').val()
+                                };
+                                userModule.modifyUserNickName(userData);
+                            }
+                            //}
+                        })
+
+                        $('#passwordSubmit').click(function(){
+                            //if(confirm("회원가입을 완료하시겠습니까?")){
+                            if(passwordForm.valid()){
+                                var userData = {
+                                    "userId": user.email,
+                                    "password": $('#inputPassword').val()
+                                };
+                                userModule.modifyUserPassword(userData);
+                            }
+                            //}
+                        })
+                    });
+                }else{
+                    location.href = getHomePath();
+
+                }
+            })
+
+        })
+    </script>
+</html>

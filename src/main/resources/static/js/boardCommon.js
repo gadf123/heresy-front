@@ -377,6 +377,42 @@ var writeArticle = function(requestUrl, articleData){
 };
 
 /*
+*  게시판 업로드 이미지
+* */
+var uploadImageArticle = function(requestUrl, data){
+    return new Promise(function(resolve, reject){
+        userModule
+            .firebase
+            .auth()
+            .currentUser
+            .getIdToken(true)
+            .then(function(firebaseIdToken) {
+                $.ajax({
+                    url : requestUrl,
+                    method : 'post',
+                    data : data,
+                    enctype: 'multipart/form-data',
+                    contentType: false,
+                    processData : false,
+                    cache : false,
+                    beforeSend : function(jqXHR, settings){
+                        jqXHR.setRequestHeader('idToken', firebaseIdToken);
+                    }
+                }).done(function(data, textStatus, jqXHR) {
+                    if(jqXHR.status === 200 && jqXHR.statusText === "success"){
+                        resolve(data);
+                    }
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                }).always(function() {
+                });
+            }).catch(function(error) {
+            console.log('uploadImageArticle error', error)
+        });
+    });
+};
+
+/*
 *  게시판 글 지우기
 * */
 var deleteArticle = function (requestUrl) {

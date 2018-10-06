@@ -54,7 +54,7 @@ public class BasicBoardArticleServiceTest {
         basicBoardArticle.setUserIdx(2);
         basicBoardArticle.setUserNickName("TESTUSERNICKNAMEUPDATE");
         basicBoardArticle.setContent("TESTCONTENTUPDATE");
-        System.out.println(basicBoardArticleMapper.update(basicBoardArticle));
+        System.out.println(basicBoardArticleMapper.updateArticle(basicBoardArticle));
     }
 
     @Test

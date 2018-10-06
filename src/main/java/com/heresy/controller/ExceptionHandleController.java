@@ -19,8 +19,11 @@ public class ExceptionHandleController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
-    public void defaultExceptionHandler(){
-
+    public ResponseEntity<ExceptionResponseHandler> defaultExceptionHandler(Exception exception){
+        ExceptionResponseHandler exceptionResponseHandler = new ExceptionResponseHandler();
+        exceptionResponseHandler.setMainMessage(exception.getMessage());
+        exception.printStackTrace();
+        return new ResponseEntity(exceptionResponseHandler, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(TokenException.class)

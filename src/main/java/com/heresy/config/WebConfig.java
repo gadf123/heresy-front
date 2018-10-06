@@ -6,6 +6,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,6 +18,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebMvc
 @MapperScan(value={"com.**.mapper"})
+@PropertySource("classpath:/upload.properties")
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -25,12 +27,14 @@ public class WebConfig implements WebMvcConfigurer {
                 "/webjars/**",
                 "/img/**",
                 "/css/**",
-                "/js/**")
+                "/js/**",
+                "/uploadImage/**")
                 .addResourceLocations(
                 "classpath:/META-INF/resources/webjars/",
                 "classpath:/static/img/",
                 "classpath:/static/css/",
-                "classpath:/static/js/");
+                "classpath:/static/js/",
+                "classpath:/uploadImage/");
                 //.setCachePeriod(0);
     }
 

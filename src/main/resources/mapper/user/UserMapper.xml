@@ -4,6 +4,39 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.heresy.mapper.UserMapper">
+    <select id="selectOneWithCount" parameterType="Integer" resultType="com.heresy.domain.user.UserWithCount">
+        SELECT
+        a.userIdx,
+        userId,
+        userNickName,
+        experience,
+        tendency,
+        introduction,
+        authSnsId,
+        createDate,
+        b.agendaArticleCount,
+        c.basicArticleCount,
+        d.agendaCommentCount,
+        e.basicCommentCount
+        FROM USER a
+        left join (
+            select count(*) as agendaArticleCount, userIdx
+            from AgendaAndDebateBoardArticle
+            where userIdx = #{userIdx}) b on a.userIdx = b.userIdx
+        left join (
+            select count(*) as basicArticleCount, userIdx
+            from BasicBoardArticle
+            where userIdx = #{userIdx}) c on a.userIdx = c.userIdx
+        left join (
+            select count(*) as agendaCommentCount, userIdx
+            from AgendaAndDebateBoardCommet
+            where userIdx = #{userIdx}) d on a.userIdx = d.userIdx
+        left join (
+            select count(*) as basicCommentCount, userIdx
+            from BasicBoardComment
+            where userIdx = #{userIdx}) e on a.userIdx = e.userIdx
+        WHERE a.userIdx = #{userIdx}
+    </select>
 
     <select id="selectOneByUserId" parameterType="String" resultType="com.heresy.domain.user.User">
         SELECT
@@ -33,6 +66,12 @@
         WHERE userNickName = #{userNickName}
     </select>
 
+    <select id="selectPasswordByUserIdx" parameterType="Integer" resultType="String">
+        SELECT
+          password
+        FROM USER
+        WHERE userIdx = #{userIdx}
+    </select>
 
     <insert id="insert" parameterType="com.heresy.domain.user.User">
         INSERT INTO USER
@@ -62,18 +101,26 @@
             )
     </insert>
 
-   <!-- <update id="update" parameterType="map">
+    <!--<update id="update" parameterType="map">
         UPDATE
-              BASICBOARDARTICLE
-        SET bad = #{bad}
-            , content = #{content}
-            , good = #{good}
-            , subBoardIdx = #{subBoardIdx}
-            , title = #{title}
-            , updateDate = CURRENT_TIMESTAMP()
-            , userNickName = #{userNickName}
-        WHERE idx = #{idx}
-    </update> -->
+              USER
+        SET password = #{encodedPassword}
+        WHERE userIdx = #{userIdx}
+    </update>-->
+
+    <update id="updateUserPassword" parameterType="Map">
+        UPDATE
+              USER
+        SET password = #{encodedPassword}
+        WHERE userIdx = #{userIdx}
+    </update>
+
+    <update id="updateUserNickName" parameterType="Map">
+         UPDATE
+              USER
+        SET userNickName = #{userNickName}
+        WHERE userIdx = #{userIdx}
+    </update>
 
     <delete id="delete" parameterType="Integer">
         DELETE

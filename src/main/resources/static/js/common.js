@@ -96,6 +96,139 @@ userModule.prototype.init = function(pageView){
             pageView(user);
         })});
 };
+
+userModule.prototype.signUp = function (_userData) {
+    ajaxCall(
+        "/user/signup",
+        {
+            method : "post",
+            data : JSON.stringify(_userData)
+        },
+        function(data,jqXHR){
+            alert("회원가입 완료되었습니다");
+            location.href = getHomePath();
+        },
+        function(jqXHR){
+            alert("회원가입 에러")
+            console.log(jqXHR)
+        })
+};
+
+userModule.prototype.getUserProfile = function (requstUrl) {
+    return new Promise(function (resolve, reject) {
+        this
+            .firebase
+            .auth()
+            .currentUser
+            .getIdToken(true)
+            .then(function (firebaseIdToken) {
+                ajaxCall(
+                    requstUrl
+                    , {
+                        method: 'get',
+                        idToken: firebaseIdToken
+                    }
+                    , function (data, jqXHR) {
+                        //location.href = getMidPath() + 'board?page=1';
+                        resolve(data);
+                    }
+                    , function (jqXHR) {
+                        console.log('verifyPassword error', jqXHR);
+                    }
+                )
+            }).catch(function (error) {
+            console.log('writeArticle error', error)
+        });
+    });
+};
+
+userModule.prototype.verifyPassword = function (_userData) {
+    return new Promise(function (resolve, reject) {
+        this
+            .firebase
+            .auth()
+            .currentUser
+            .getIdToken(true)
+            .then(function (firebaseIdToken) {
+                ajaxCall(
+                    "/user/verifyPassword"
+                    , {
+                        method: 'post',
+                        data: JSON.stringify(_userData),
+                        idToken: firebaseIdToken
+                    }
+                    , function (data, jqXHR) {
+                        //location.href = getMidPath() + 'board?page=1';
+                        resolve(data);
+                    }
+                    , function (jqXHR) {
+                        console.log('verifyPassword error', jqXHR);
+                    }
+                )
+            }).catch(function (error) {
+            console.log('writeArticle error', error)
+        });
+    });
+};
+
+userModule.prototype.modifyUserNickName = function (_userData) {
+    this
+        .firebase
+        .auth()
+        .currentUser
+        .getIdToken(true)
+        .then(function (firebaseIdToken) {
+            ajaxCall(
+                "/user/modifyUserNicName"
+                , {
+                    method: 'post',
+                    data: JSON.stringify(_userData),
+                    idToken: firebaseIdToken
+                }
+                , function (data, jqXHR) {
+                    if(data){
+                        alert("수정이 완료되었습니다.");
+                        location.reload();
+                    }
+                }
+                , function (jqXHR) {
+                    console.log('modifyUserNickName error', jqXHR);
+                }
+            )
+        }).catch(function (error) {
+        console.log('modifyUserNickName error', error)
+    });
+};
+
+userModule.prototype.modifyUserPassword = function (_userData) {
+    this
+        .firebase
+        .auth()
+        .currentUser
+        .getIdToken(true)
+        .then(function (firebaseIdToken) {
+            ajaxCall(
+                "/user/modifyUserPassword"
+                , {
+                    method: 'post',
+                    data: JSON.stringify(_userData),
+                    idToken: firebaseIdToken
+                }
+                , function (data, jqXHR) {
+                    if(data){
+                        alert("수정이 완료되었습니다.\n새로운 비밀번호로 재로그인 부탁드립니다.");
+                        location.href = getHomePath();
+                    }
+                }
+                , function (jqXHR) {
+                    console.log('modifyUserPassword error', jqXHR);
+                }
+            )
+        }).catch(function (error) {
+        console.log('modifyUserPassword error', error)
+        });
+};
+
 userModule.prototype.logIn = function(_id, _pwd){
     var _this = this;
     var logoutedEl = $('.logout-profile');
@@ -136,45 +269,6 @@ userModule.prototype.logOut = function(){
         .catch(function (error) {
             console.log(error)
         });
-};
-
-userModule.prototype.signUp = function (_userData) {
-    ajaxCall(
-        "/user/signup",
-        {
-            method : "post",
-            data : JSON.stringify(_userData)
-        },
-        function(data,jqXHR){
-            alert("회원가입 완료되었습니다");
-            //location.href = getHomePath();
-            /*this.firebase
-                .auth()
-                .createUserWithEmailAndPassword(_userData.userId, _userData.password)
-                .then(function (res) {
-                    var user = firebase.auth().currentUser;
-                    user.updateProfile({
-                        displayName: _userData.userNickName
-                    }).then(function() {
-                        alert("firebase 회원가입 완료");
-                    }).catch(function(error) {
-                    });
-                })
-                .catch(function (error) {
-                    if (error.code === "auth/invalid-email") {
-                        alert("이메일이 올바르지 않습니다");
-                    } else {
-                        alert("firebase error");
-                    }
-
-                    console.log(error)
-                });*/
-
-        },
-        function(jqXHR){
-            alert("회원가입 에러")
-            console.log(jqXHR)
-        })
 };
 
 var userModule = new userModule();

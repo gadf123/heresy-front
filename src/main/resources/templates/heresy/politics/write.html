@@ -33,18 +33,35 @@
 <script th:inline="javascript">
     $(document).ready(function(){
 
-        $('#summernote').summernote({
-            tabsize: 2,
-            height: 400,
-            maxHeight : 400
-        });
-
         var pageView = function(user){
             $('.list_link_to').click(function(){
                 location.href = getMidPath() + 'board?page=1';
             });
 
             if(user){
+                $('#summernote').summernote({
+                    tabsize: 2,
+                    height: 400,
+                    maxHeight : 400,
+                    callbacks: {
+                        onImageUpload: function(files) {
+                            // upload image to server and create imgNode...
+                            console.log(files)
+                            var data = new FormData();
+                            data.append('image', files[0]);
+                            data.append('articleIdx', '1');
+
+                            uploadImageArticle('/board/addImage',data)
+                                .then(function(image){
+                                    var imageEl = document.createElement('img');
+                                    imageEl.src = "/uploadImage/"+image;
+                                    $('#summernote').summernote('insertNode', imageEl);
+                                });
+
+                        }
+                    }
+                });
+
                 $('#writeBtn').click(function(){
                     var title = $('#articleTitle');
                     if(title.val() === ''){

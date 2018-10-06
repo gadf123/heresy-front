@@ -5,10 +5,12 @@ import com.heresy.domain.board.AgendaAndDebateBoardArticle;
 import com.heresy.domain.board.BasicBoardArticle;
 import com.heresy.domain.user.User;
 import com.heresy.service.AgendaBoardArticleService;
+import com.heresy.utills.FileUploader;
 import com.heresy.utills.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -26,6 +28,9 @@ public class AgendaBoardController {
     @Autowired
     AgendaBoardArticleService agendaBoardArticleService;
 
+    @Autowired
+    FileUploader fileUploader;
+
     @RequestMapping(value = "/write", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin(origins = "*")
     @ResponseBody
@@ -40,6 +45,18 @@ public class AgendaBoardController {
         agendaAndDebateBoardArticle.setGood(0);
 
         return agendaBoardArticleService.insert(agendaAndDebateBoardArticle);
+    }
+
+    @RequestMapping(value = "/addImage", method = RequestMethod.POST)
+    @CrossOrigin(origins = "*")
+    @ResponseBody
+    @AuthCheck
+    public String addImage(HttpServletResponse response,
+                           @RequestParam("image") MultipartFile image, User user){
+        System.out.println("------------------");
+        String fileName = fileUploader.uploadSingleFile(image);
+        System.out.println("------------------");
+        return fileName;
     }
 
     @RequestMapping("/getAllArticle")

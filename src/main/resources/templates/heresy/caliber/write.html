@@ -33,25 +33,56 @@
 </body>
 <script th:inline="javascript">
     $(document).ready(function(){
-        $('#summernote').summernote({
-            tabsize: 2,
-            height: 400,
-            maxHeight : 400
-        });
 
-        $('#writeBtn').click(function(){
-            if($('#articleTitle').val() === ''){
-                alert("제목은 필수 입니다.")
-                return false;
+        var pageView = function(user){
+            $('.list_link_to').click(function(){
+                location.href = getMidPath() + 'board?page=1';
+            });
+
+            if(user){
+                $('#summernote').summernote({
+                    tabsize: 2,
+                    height: 400,
+                    maxHeight : 400,
+                    callbacks: {
+                        onImageUpload: function(files) {
+                            // upload image to server and create imgNode...
+                            console.log(files)
+                            var data = new FormData();
+                            data.append('image', files[0]);
+                            data.append('articleIdx', '1');
+
+                            uploadImageArticle('/agendaBoard/addImage',data)
+                                .then(function(image){
+                                    var imageEl = document.createElement('img');
+                                    imageEl.src = "/uploadImage/"+image;
+                                    $('#summernote').summernote('insertNode', imageEl);
+                                });
+
+                        }
+                    }
+                });
+
+                $('#writeBtn').click(function(){
+                    var title = $('#articleTitle');
+                    if(title.val() === ''){
+                        alert("제목은 필수 입니다.")
+                        return false;
+                    }
+
+                    var articleData = {
+                        "title": title.val(),
+                        "content" : $('#summernote').summernote('code'),
+                    };
+
+                    writeArticle('/agendaBoard/write', articleData);
+                });
+            }else{
+                location.href = getMidPath() + 'board?page=1';
             }
+        };
 
-            var articleData = {
-                "title": $('#articleTitle').val(),
-                "content" : $('#summernote').summernote('code'),
-            };
-
-            writeArticle('/agendaBoard/write', articleData);
-        });
+        userModule.init(pageView);
     });
 
 

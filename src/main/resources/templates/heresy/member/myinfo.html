@@ -5,7 +5,6 @@
 <body>
 <div th:replace="layout/header :: header"></div>
 <div class="container">
-
         <div class="hc vc myinfo">
             <table class="table table-bordered" style="width: 400px">
                 <thead>
@@ -13,15 +12,14 @@
                     <th scope="col" colspan="3">회원정보</th>
                 </tr>
                 </thead>
-
                 <tbody>
                 <tr>
                     <td style="width:100px">ID</td>
-                    <td style="width:300px" colspan="2">elther@naver.com</td>
+                    <td style="width:300px" colspan="2" id="userId"></td>
                 </tr>
                 <tr>
                     <td>Nick</td>
-                    <td colspan="2">돌고래야</td>
+                    <td colspan="2" id="userNickName"></td>
                 </tr>
                 <tr>
                     <td>Lv / Exp</td>
@@ -29,27 +27,46 @@
                 </tr>
                 <tr>
                     <td>작성글 수</td>
-                    <td>3424</td>
+                    <td id="totalArticle"></td>
                     <td style="width: 70px"><button>보기</button></td>
                 </tr>
                 <tr>
                     <td>댓글 수</td>
-                    <td>324</td>
+                    <td id="totalComment"></td>
                     <td style="width: 70px"><button>보기</button></td>
                 </tr>
                 </tbody>
             </table>
             <span>
-                <span><button>수정</button></span>
-                <span><button>탈퇴</button></span>
+                <button type="button" class="btn btn-primary link-to-modify">
+                    수정
+                </button>
+                <button type="button" class="btn btn-light" id="deleteUserBtn">
+                    탈퇴
+                </button>
             </span>
-
         </div>
-
-
 </div>
 </body>
 <script th:inline="javascript">
-</script>
+    $(document).ready(function(){
+        userModule.init(function (user) {
+            if(user){
+                $('.link-to-modify').click(function(){
+                    location.href = getMidPath() + "modifyinfo";
+                })
+                userModule.getUserProfile("/user/getUserProfileWithCount").then(function (userData) {
+                    console.log(userData)
+                    $('#userId').text(userData.userId);
+                    $('#userNickName').text(userData.userNickName);
+                    $('#totalArticle').text(Number(userData.agendaArticleCount) + Number(userData.basicArticleCount));
+                    $('#totalComment').text(Number(userData.agendaCommentCount) + Number(userData.basicCommentCount));
 
+                });
+            }else{
+                location.href = getHomePath();
+            }
+        });
+    });
+</script>
 </html>
