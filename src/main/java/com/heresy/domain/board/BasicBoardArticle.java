@@ -1,5 +1,6 @@
 package com.heresy.domain.board;
 
+import com.heresy.domain.user.User;
 import lombok.Data;
 
 import java.util.Date;
@@ -27,4 +28,5 @@ public class BasicBoardArticle {
 
     private Date updateDate;
 
+    private User user;
 }

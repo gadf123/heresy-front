@@ -24,16 +24,18 @@
 
                 </div>
                 <div style="text-align :center">
-                    <button class="articleBtn btn btn-dark" type="button">
+                    <button class="articleBtn btn btn-dark" type="button" id="likeBtn">
                         Like
                     </button>
-                    <button class="articleBtn btn btn-dark" type="button">
+                    <button class="articleBtn btn btn-dark" type="button" id="dislikeBtn">
                         Dislike
                     </button>
-                    <button class="articleBtn btn btn-dark rewrite_link_to" type="button">
+                    <button class="articleBtn btn btn-dark rewrite_link_to" style="display: none;"
+                            id="rewriteBtn" type="button">
                         수정
                     </button>
-                    <button class="articleBtn btn btn-dark" id="deleteBtn" type="button">
+                    <button class="articleBtn btn btn-dark" style="display: none;"
+                            id="deleteBtn" type="button">
                         삭제
                     </button>
                     <button class="articleBtn btn btn-dark list_link_to" type="button">
@@ -74,7 +76,7 @@
                 location.href = getMidPath() + "rewrite?id="+getUrlParameter('id');
             });
 
-            getOneArticle('/board/getOneArticle','/basicComment/selectAll');
+            getOneArticle('/board/getOneArticle','/basicComment/selectAll', user);
 
             if(user){
                 $('#deleteBtn').click(function () {

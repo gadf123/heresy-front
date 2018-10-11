@@ -74,7 +74,7 @@
                 location.href = getMidPath() + "rewrite?id="+getUrlParameter('id');
             });
 
-            getOneArticle('/board/getOneArticle','/basicComment/selectAll');
+            getOneArticle('/board/getOneArticle','/basicComment/selectAll', user);
 
             if(user){
                 $('#deleteBtn').click(function () {

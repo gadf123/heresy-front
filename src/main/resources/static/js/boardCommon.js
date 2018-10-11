@@ -93,7 +93,29 @@ var makeArticleView = function (articleData) {
     $('#articleTime').text(parseDateWithTime(articleData.createDate));
 
     var content = $.parseHTML(articleData.content);
+    if($('#articleContent').children()){
+        $('#articleContent').empty();
+    }
     $('#articleContent').append(content);
+};
+
+/*
+*  게시판 글 수정 작제 좋아요 권한체크
+* */
+var checkArticleAuth = function (articleData, user) {
+    if(user){
+        if(user.email === articleData.user.userId){
+            $('#rewriteBtn, #deleteBtn').css({display: 'inline-block'});
+        }
+
+        $('#likeBtn, #dislikeBtn').click(function(){
+            alert('좋아요, 싫어요 엑션 바인딩 필요')
+        })
+    }else{
+        $('#likeBtn, #dislikeBtn').click(function(){
+            alert('로그인이 필요합니다.')
+        })
+    }
 };
 
 /*
@@ -324,7 +346,7 @@ var makeCommentView = function (data, commentsView) {
 /*
 *  게시판 글 조회
 * */
-var getOneArticle = function(requestUrl, commentRequestUrl){
+var getOneArticle = function(requestUrl, commentRequestUrl, user){
     ajaxCall(
         requestUrl
         , {data:{articleIdx : getUrlParameter('id')}}
@@ -332,6 +354,7 @@ var getOneArticle = function(requestUrl, commentRequestUrl){
             if(new URL(location.href).pathname.indexOf('view')>0){
                 makeArticleView(data);
                 getCommentList(commentRequestUrl);
+                checkArticleAuth(data, user)
             }
 
             if(new URL(location.href).pathname.indexOf('rewrite')>0){
