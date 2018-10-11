@@ -18,7 +18,7 @@
         c.basicArticleCount,
         d.agendaCommentCount,
         e.basicCommentCount
-        FROM USER a
+        FROM User a
         left join (
             select count(*) as agendaArticleCount, userIdx
             from AgendaAndDebateBoardArticle
@@ -48,7 +48,7 @@
             introduction,
             authSnsId,
             createDate
-        FROM USER
+        FROM User
         WHERE userId = #{userId}
     </select>
 
@@ -62,19 +62,19 @@
             introduction,
             authSnsId,
             createDate
-        FROM USER
+        FROM User
         WHERE userNickName = #{userNickName}
     </select>
 
     <select id="selectPasswordByUserIdx" parameterType="Integer" resultType="String">
         SELECT
           password
-        FROM USER
+        FROM User
         WHERE userIdx = #{userIdx}
     </select>
 
     <insert id="insert" parameterType="com.heresy.domain.user.User">
-        INSERT INTO USER
+        INSERT INTO User
             (
             userIdx,
             userId,

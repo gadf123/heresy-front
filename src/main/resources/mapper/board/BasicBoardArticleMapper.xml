@@ -30,7 +30,7 @@
             , good
             , bad
             , createDate
-        FROM BASICBOARDARTICLE
+        FROM BasicBoardArticle
     </select>
 
     <select id="selectWithOffset" parameterType="Map" resultType="Map" >
@@ -41,7 +41,7 @@
         , good
         , bad
         , createDate
-        FROM BASICBOARDARTICLE
+        FROM BasicBoardArticle
         ORDER BY createDate DESC
         LIMIT #{offSet},#{pageSize}
     </select>
@@ -57,13 +57,13 @@
         , a.userIdx
         , a.userNickName
         , b.userId
-        FROM BASICBOARDARTICLE a
+        FROM BasicBoardArticle a
         JOIN USER b ON a.userIdx = b.userIdx
         WHERE articleIdx = #{articleIdx}
     </select>
 
     <insert id="insert" parameterType="com.heresy.domain.board.BasicBoardArticle">
-        INSERT INTO BASICBOARDARTICLE
+        INSERT INTO BasicBoardArticle
             (
               ARTICLEIDX
             , bad
@@ -92,7 +92,7 @@
 
     <update id="updateArticle" parameterType="map">
         UPDATE
-              BASICBOARDARTICLE
+              BasicBoardArticle
         SET  title = #{title}
             , content = #{content}
             , updateDate = CURRENT_TIMESTAMP()
@@ -103,7 +103,7 @@
     <delete id="delete" parameterType="Integer">
         DELETE
         FROM
-          BASICBOARDARTICLE
+          BasicBoardArticle
         WHERE articleIdx = #{articleIdx}
     </delete>
 
